@@ -1,0 +1,41 @@
+{
+  "name": "lekki-stays",
+  "version": "1.0.0",
+  "description": "Premium shortlet booking platform for Lagos, Nigeria with WhatsApp integration",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "build": "echo 'No build step required for this project'",
+    "test": "echo 'Tests not implemented yet'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "shortlet",
+    "booking",
+    "luxury",
+    "nigeria",
+    "lagos",
+    "whatsapp",
+    "hospitality",
+    "accommodation"
+  ],
+  "author": "Lekki Stays",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Geraldsaviour/lekki-stays.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "better-sqlite3": "^9.4.3",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
