@@ -227,9 +227,12 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
   try {
     const bookingData = req.body;
     
+    console.log('📝 Booking request received:', bookingData);
+    
     // Enhanced validation
     const validation = validateBookingData(bookingData);
     if (!validation.isValid) {
+      console.warn('❌ Validation failed:', validation.errors);
       return res.status(400).json({
         success: false,
         error: 'Validation failed',
@@ -240,14 +243,18 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
     // Check if apartment exists
     const apartment = Apartment.getById(bookingData.apartmentId);
     if (!apartment) {
+      console.warn(`❌ Apartment not found: ${bookingData.apartmentId}`);
       return res.status(404).json({
         success: false,
         error: 'Apartment not found'
       });
     }
     
+    console.log(`✅ Apartment found: ${apartment.name}`);
+    
     // Check guest capacity
     if (bookingData.numGuests > apartment.maxGuests) {
+      console.warn(`❌ Guest capacity exceeded: ${bookingData.numGuests} > ${apartment.maxGuests}`);
       return res.status(400).json({
         success: false,
         error: `Maximum ${apartment.maxGuests} guests allowed for this property`
@@ -273,8 +280,10 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
         // Generate unique booking ID with collision detection
         const bookingId = generateUniqueBookingId();
         
+        console.log(`🔄 Creating booking with ID: ${bookingId}`);
+        
         // Create booking with atomic operation
-        return Booking.create({
+        const newBooking = Booking.create({
           id: bookingId,
           apartmentId: bookingData.apartmentId,
           guestName: bookingData.guestName,
@@ -288,10 +297,18 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         });
+        
+        if (!newBooking) {
+          throw new Error('Failed to create booking - returned null');
+        }
+        
+        console.log(`✅ Booking created successfully: ${newBooking.id}`);
+        return newBooking;
       }
     );
     
     if (!bookingResult.success) {
+      console.warn('❌ Booking availability check failed:', bookingResult.error);
       return res.status(409).json({
         success: false,
         error: bookingResult.error,
@@ -300,6 +317,15 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
     }
     
     const booking = bookingResult.booking;
+    
+    if (!booking) {
+      console.error('❌ Booking object is null after creation');
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to create booking',
+        message: 'Booking creation returned null'
+      });
+    }
     
     // Send WhatsApp notification to host
     const whatsappLink = WhatsAppNotifier.generateHostNotification(booking, apartment);
@@ -324,7 +350,8 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error creating booking:', error);
+    console.error('❌ Error creating booking:', error);
+    console.error('Stack trace:', error.stack);
     
     // Don't expose internal error details in production
     const isDevelopment = process.env.NODE_ENV === 'development';
