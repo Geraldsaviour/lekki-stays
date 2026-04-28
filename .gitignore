@@ -1,12 +1,28 @@
 # Dependencies
 node_modules/
-server/node_modules/
 
 # Environment variables (NEVER commit these!)
 .env
-server/.env
 .env.local
-.env.production
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build directories
+dist/
+build/
+
+# Large files
+*.zip
+*.mp4
+*.mov
+
+# Kiro settings
+.kiro/settings/
 
 # Database files
 *.db

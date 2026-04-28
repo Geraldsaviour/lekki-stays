@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "name": "Auto Publish to GitHub",
+  "description": "Automatically publishes changes to GitHub when files are saved with cleanup and size enforcement",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*",
+      "*.html",
+      "*.css",
+      "*.js",
+      "*.jsx",
+      "*.ts",
+      "*.tsx",
+      "*.json",
+      "*.md"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "powershell -ExecutionPolicy Bypass -File .kiro/scripts/publish.ps1",
+    "timeout": 120
+  }
+}
