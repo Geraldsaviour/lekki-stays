@@ -1,5 +1,5 @@
 {
-  "name": "lekki-stays",
+  "name": "lekkistays",
   "version": "1.0.0",
   "description": "Premium shortlet booking platform for Lagos, Nigeria with WhatsApp integration",
   "main": "server/server.js",
