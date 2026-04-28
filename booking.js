@@ -766,6 +766,11 @@ async function loadPendingBookings() {
 }
 
 function createBookingCard(booking) {
+    // This function is disabled - bookings are managed via WhatsApp by host
+    console.log('Booking card creation disabled - use WhatsApp for booking management');
+    return document.createElement('div');
+    
+    /* ORIGINAL CODE - COMMENTED OUT
     const card = document.createElement('div');
     card.className = 'booking-card-item';
     card.id = `booking-${booking.id}`;
@@ -839,6 +844,7 @@ function createBookingCard(booking) {
     `;
     
     return card;
+    */
 }
 
 function confirmBooking(bookingId) {
