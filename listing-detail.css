@@ -395,7 +395,7 @@ body {
 .calendar-dropdown.active {
     opacity: 1;
     visibility: visible;
-    transform: translateX(0);
+    transform: translate(-50%, -50%);
 }
 
 .calendar-header {
@@ -789,24 +789,6 @@ body {
     .booking-panel {
         position: static;
         order: -1;
-    }
-
-    .calendar-dropdown {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        right: auto;
-        transform: translate(-50%, -50%);
-        width: 90vw;
-        max-width: 400px;
-        max-height: 80vh;
-        overflow-y: auto;
-        z-index: 2000;
-        margin-right: 0;
-    }
-
-    .calendar-dropdown.active {
-        transform: translate(-50%, -50%);
     }
 
     .calendar-grids {
