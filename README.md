@@ -47,6 +47,11 @@ A modern, secure booking platform for luxury shortlet accommodations in Lagos, N
 ### Prerequisites
 - Node.js (v14 or higher)
 - npm or yarn
+- Firebase account (free tier)
+
+### Quick Setup (20 minutes)
+
+**See:** `FIREBASE_QUICK_START.md` for step-by-step guide
 
 ### Installation
 
@@ -58,65 +63,68 @@ A modern, secure booking platform for luxury shortlet accommodations in Lagos, N
 
 2. **Install dependencies:**
    ```bash
-   # Install root dependencies
-   npm install
-   
-   # Install server dependencies
-   cd server
    npm install
    ```
 
-3. **Set up environment variables:**
+3. **Set up Firebase:**
+   - Create Firebase project at https://console.firebase.google.com/
+   - Enable Firestore Database
+   - Enable Authentication (Email/Password)
+   - Copy your Firebase config
+   - Update `firebase-config.js` with your config
+
+4. **Install Firebase CLI:**
    ```bash
-   # Copy the example file
-   cp server/.env.example server/.env
-   
-   # Edit server/.env with your details:
-   # - Update BASE_URL to http://localhost:3000
-   # - Add your WhatsApp number
-   # - Add your bank details
-   # - Create a strong ADMIN_KEY
+   npm install -g firebase-tools
+   firebase login
+   firebase init
    ```
 
-4. **Start the development server:**
+5. **Start local server:**
    ```bash
-   cd server
-   npm run dev
+   firebase serve
    ```
 
-5. **Visit:** http://localhost:3000
+6. **Visit:** http://localhost:5000
 
-## 🌐 Deployment to Vercel
+**Full Guide:** See `docs/FIREBASE_SETUP_GUIDE.md`
 
-### Quick Deploy
+## 🌐 Deployment to Firebase
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/lekki-stays)
+### One-Command Deploy
 
-### Manual Deployment
+```bash
+firebase deploy
+```
 
-1. **Push to GitHub:**
+Your site will be live at: `https://your-project.web.app`
+
+### First-Time Deployment
+
+1. **Complete Firebase setup** (see FIREBASE_QUICK_START.md)
+
+2. **Initialize Firebase:**
    ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
+   firebase init
+   ```
+   - Select: Firestore, Hosting
+   - Public directory: `.` (current directory)
+   - Single-page app: No
+
+3. **Deploy:**
+   ```bash
+   firebase deploy
    ```
 
-2. **Deploy to Vercel:**
-   - Go to [vercel.com](https://vercel.com)
-   - Import your GitHub repository
-   - Add environment variables in Vercel dashboard
-   - Deploy!
+4. **Done!** Your site is live with:
+   - ✅ Database (Firestore)
+   - ✅ Hosting (Global CDN)
+   - ✅ SSL Certificate (Automatic)
+   - ✅ Custom domain support
 
-3. **Configure Environment Variables in Vercel:**
-   ```
-   NODE_ENV=production
-   HOST_WHATSAPP_NUMBER=+2349039269846
-   BASE_URL=https://your-app-name.vercel.app
-   BANK_NAME=Your Bank Name
-   BANK_ACCOUNT_NUMBER=Your Account Number
-   BANK_ACCOUNT_NAME=Your Account Name
-   ADMIN_KEY=your-super-secret-admin-key
-   ```
+### Alternative: Vercel (if using Node.js backend)
+
+See `docs/DEPLOYMENT_GUIDE.md` for Vercel deployment instructions.
 
 ## ⚙️ Environment Variables
 
