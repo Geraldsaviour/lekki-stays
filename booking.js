@@ -720,6 +720,218 @@ const havenListings = [
     }
 ];
 
+// === PENDING BOOKINGS MANAGEMENT ===
+function loadPendingBookings() {
+    const bookingManager = new BookingManager();
+    const allBookings = bookingManager.getAllBookings();
+    
+    if (!allBookings.success || allBookings.bookings.length === 0) {
+        showEmptyBookingsState();
+        return;
+    }
+    
+    // Filter pending bookings
+    const pendingBookings = allBookings.bookings.filter(b => b.status === 'pending');
+    
+    if (pendingBookings.length === 0) {
+        showEmptyBookingsState();
+        return;
+    }
+    
+    // Show pending bookings section
+    const section = document.getElementById('pendingBookingsSection');
+    section.style.display = 'block';
+    
+    // Populate bookings list
+    const bookingsList = document.getElementById('bookingsList');
+    bookingsList.innerHTML = '';
+    
+    pendingBookings.forEach(booking => {
+        const bookingCard = createBookingCard(booking);
+        bookingsList.appendChild(bookingCard);
+    });
+}
+
+function createBookingCard(booking) {
+    const card = document.createElement('div');
+    card.className = 'booking-card-item';
+    card.id = `booking-${booking.id}`;
+    
+    const checkInDate = new Date(booking.checkin);
+    const checkOutDate = new Date(booking.checkout);
+    
+    card.innerHTML = `
+        <div class="booking-card-header">
+            <div>
+                <div class="booking-ref">Booking #${booking.id}</div>
+                <div style="font-size: 0.9rem; color: #999; margin-top: 4px;">
+                    Submitted: ${new Date(booking.createdAt).toLocaleDateString('en-NG')}
+                </div>
+            </div>
+            <span class="booking-status status-${booking.status}">${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}</span>
+        </div>
+        
+        <div class="booking-details-grid">
+            <div class="detail-item">
+                <div class="detail-item-label">Apartment</div>
+                <div class="detail-item-value">${booking.propertyName || 'Property ' + booking.propertyId}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-item-label">Check-in</div>
+                <div class="detail-item-value">${formatDate(checkInDate)}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-item-label">Check-out</div>
+                <div class="detail-item-value">${formatDate(checkOutDate)}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-item-label">Guests</div>
+                <div class="detail-item-value">${booking.numGuests || booking.guests} guest${booking.numGuests > 1 ? 's' : ''}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-item-label">Total Price</div>
+                <div class="detail-item-value">₦${(booking.totalPrice || 0).toLocaleString('en-NG')}</div>
+            </div>
+        </div>
+        
+        <div class="guest-info">
+            <div class="guest-info-row">
+                <span class="guest-info-label">Guest Name:</span>
+                <span class="guest-info-value">${booking.guestName}</span>
+            </div>
+            <div class="guest-info-row">
+                <span class="guest-info-label">Email:</span>
+                <span class="guest-info-value">${booking.guestEmail}</span>
+            </div>
+            <div class="guest-info-row">
+                <span class="guest-info-label">Phone:</span>
+                <span class="guest-info-value">${booking.guestPhone}</span>
+            </div>
+            ${booking.specialRequests ? `
+            <div class="guest-info-row">
+                <span class="guest-info-label">Special Requests:</span>
+                <span class="guest-info-value">${booking.specialRequests}</span>
+            </div>
+            ` : ''}
+        </div>
+        
+        <div class="booking-actions">
+            <button class="btn-decline" onclick="declineBooking('${booking.id}')">
+                <i data-lucide="x"></i> Decline
+            </button>
+            <button class="btn-confirm" onclick="confirmBooking('${booking.id}')">
+                <i data-lucide="check"></i> Confirm
+            </button>
+        </div>
+    `;
+    
+    return card;
+}
+
+function confirmBooking(bookingId) {
+    if (!confirm('Are you sure you want to confirm this booking?')) {
+        return;
+    }
+    
+    const bookingManager = new BookingManager();
+    const result = bookingManager.updateBookingStatus(bookingId, 'confirmed');
+    
+    if (result.success) {
+        // Update UI
+        const card = document.getElementById(`booking-${bookingId}`);
+        if (card) {
+            card.style.opacity = '0.6';
+            const statusBadge = card.querySelector('.booking-status');
+            statusBadge.textContent = 'Confirmed';
+            statusBadge.className = 'booking-status status-confirmed';
+            
+            const actionButtons = card.querySelector('.booking-actions');
+            actionButtons.innerHTML = '<span style="color: #4caf50; font-weight: 600;">✓ Confirmed</span>';
+        }
+        
+        // Show success message
+        alert('Booking confirmed successfully!');
+        
+        // Send confirmation via WhatsApp
+        sendConfirmationMessage(result.booking, 'confirmed');
+    } else {
+        alert('Failed to confirm booking: ' + result.message);
+    }
+}
+
+function declineBooking(bookingId) {
+    if (!confirm('Are you sure you want to decline this booking?')) {
+        return;
+    }
+    
+    const bookingManager = new BookingManager();
+    const result = bookingManager.updateBookingStatus(bookingId, 'declined');
+    
+    if (result.success) {
+        // Update UI
+        const card = document.getElementById(`booking-${bookingId}`);
+        if (card) {
+            card.style.opacity = '0.6';
+            const statusBadge = card.querySelector('.booking-status');
+            statusBadge.textContent = 'Declined';
+            statusBadge.className = 'booking-status status-declined';
+            
+            const actionButtons = card.querySelector('.booking-actions');
+            actionButtons.innerHTML = '<span style="color: #f44336; font-weight: 600;">✗ Declined</span>';
+        }
+        
+        // Show success message
+        alert('Booking declined successfully!');
+        
+        // Send decline message via WhatsApp
+        sendConfirmationMessage(result.booking, 'declined');
+    } else {
+        alert('Failed to decline booking: ' + result.message);
+    }
+}
+
+function sendConfirmationMessage(booking, status) {
+    const checkInDate = new Date(booking.checkin);
+    const checkOutDate = new Date(booking.checkout);
+    
+    let message;
+    if (status === 'confirmed') {
+        message = `Hello ${booking.guestName}! Your booking has been confirmed. 
+
+Booking ID: ${booking.id}
+Apartment: ${booking.propertyName || 'Property ' + booking.propertyId}
+Check-in: ${formatDate(checkInDate)}
+Check-out: ${formatDate(checkOutDate)}
+Guests: ${booking.numGuests}
+Total: ₦${(booking.totalPrice || 0).toLocaleString('en-NG')}
+
+We look forward to hosting you! Check-in instructions will be sent shortly.`;
+    } else {
+        message = `Hello ${booking.guestName}, Thank you for your interest in booking with us. Unfortunately, we are unable to confirm your booking for ${formatDate(checkInDate)} - ${formatDate(checkOutDate)}. 
+
+Please feel free to contact us to explore alternative dates or properties. We appreciate your understanding!`;
+    }
+    
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${booking.guestPhone.replace(/\D/g, '')}?text=${encodedMessage}`;
+    
+    // Open WhatsApp (optional - can be removed if you want silent sending)
+    console.log('Sending confirmation message to:', booking.guestPhone);
+}
+
+function showEmptyBookingsState() {
+    const section = document.getElementById('pendingBookingsSection');
+    const bookingsList = document.getElementById('bookingsList');
+    
+    section.style.display = 'block';
+    bookingsList.innerHTML = `
+        <div class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-text">No pending bookings at the moment</div>
+        </div>
+    `;
+}
+
 // Navbar Book Now button functionality
 document.addEventListener('DOMContentLoaded', function() {
     const bookNowBtn = document.getElementById('bookNowBtn');
@@ -728,5 +940,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Navigate to index.html apartments section
             window.location.href = 'index.html#apartments';
         });
+    }
+    
+    // Load pending bookings if on booking page
+    if (document.getElementById('pendingBookingsSection')) {
+        loadPendingBookings();
     }
 });
