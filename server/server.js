@@ -29,14 +29,45 @@ app.use(express.static(path.join(__dirname, '..'), {
 }));
 
 // Explicit routes for main static files
+// Explicit routes for ALL static files to ensure they load properly
 app.get('/styles.css', (req, res) => {
   res.setHeader('Content-Type', 'text/css');
   res.sendFile(path.join(__dirname, '..', 'styles.css'));
 });
 
+app.get('/listing-detail.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, '..', 'listing-detail.css'));
+});
+
+app.get('/booking.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, '..', 'booking.css'));
+});
+
+app.get('/search-results.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, '..', 'search-results.css'));
+});
+
 app.get('/script.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
   res.sendFile(path.join(__dirname, '..', 'script.js'));
+});
+
+app.get('/listing-detail.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, '..', 'listing-detail.js'));
+});
+
+app.get('/booking.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, '..', 'booking.js'));
+});
+
+app.get('/search-results.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, '..', 'search-results.js'));
 });
 
 app.get('/api-client.js', (req, res) => {
