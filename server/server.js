@@ -42,6 +42,33 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Debug endpoint to check static files
+app.get('/api/debug/files', (req, res) => {
+  const staticFiles = [
+    'styles.css',
+    'listing-detail.css', 
+    'booking.css',
+    'search-results.css',
+    'script.js',
+    'listing-detail.js',
+    'booking.js',
+    'search-results.js',
+    'api-client.js'
+  ];
+  
+  const fileStatus = staticFiles.map(file => ({
+    file,
+    exists: fs.existsSync(path.join(__dirname, '..', file)),
+    path: path.join(__dirname, '..', file)
+  }));
+  
+  res.json({
+    staticFiles: fileStatus,
+    __dirname,
+    parentDir: path.join(__dirname, '..')
+  });
+});
+
 // Performance metrics endpoint
 app.get('/api/metrics', (req, res) => {
   const metrics = getMetrics();
