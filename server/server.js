@@ -17,8 +17,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from project root
-app.use(express.static(path.join(__dirname, '..')));
+// Serve static files from server directory (where they actually exist in Vercel)
+app.use(express.static(__dirname));
 
 // Debug middleware to log all requests
 app.use((req, res, next) => {
