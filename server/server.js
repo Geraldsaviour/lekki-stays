@@ -91,7 +91,17 @@ app.get('/search-results.js', (req, res) => {
 app.get('/api-client.js', (req, res) => {
   console.log('Serving api-client.js');
   res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(path.join(__dirname, 'api-client.js'));
+  // Try server directory first, then root
+  const serverPath = path.join(__dirname, 'api-client.js');
+  const rootPath = path.join(__dirname, '..', 'api-client.js');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 // Test file
