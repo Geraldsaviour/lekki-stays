@@ -17,6 +17,70 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// STATIC FILE ROUTES - MUST BE FIRST!
+// Explicit routes for CSS files
+app.get('/styles.css', (req, res) => {
+  console.log('Serving styles.css');
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, 'styles.css'));
+});
+
+app.get('/listing-detail.css', (req, res) => {
+  console.log('Serving listing-detail.css');
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, 'listing-detail.css'));
+});
+
+app.get('/booking.css', (req, res) => {
+  console.log('Serving booking.css');
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, 'booking.css'));
+});
+
+app.get('/search-results.css', (req, res) => {
+  console.log('Serving search-results.css');
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, 'search-results.css'));
+});
+
+// Explicit routes for JS files
+app.get('/script.js', (req, res) => {
+  console.log('Serving script.js');
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'script.js'));
+});
+
+app.get('/listing-detail.js', (req, res) => {
+  console.log('Serving listing-detail.js');
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'listing-detail.js'));
+});
+
+app.get('/booking.js', (req, res) => {
+  console.log('Serving booking.js');
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'booking.js'));
+});
+
+app.get('/search-results.js', (req, res) => {
+  console.log('Serving search-results.js');
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'search-results.js'));
+});
+
+app.get('/api-client.js', (req, res) => {
+  console.log('Serving api-client.js');
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'api-client.js'));
+});
+
+// Test file
+app.get('/test.txt', (req, res) => {
+  console.log('Serving test.txt');
+  res.setHeader('Content-Type', 'text/plain');
+  res.sendFile(path.join(__dirname, 'test.txt'));
+});
+
 // Serve static files from server directory (where they actually exist in Vercel)
 app.use(express.static(__dirname));
 
