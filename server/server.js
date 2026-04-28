@@ -86,6 +86,28 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
+// Serve individual listing pages
+app.get('/listing-:id.html', (req, res) => {
+  const listingId = req.params.id;
+  const filePath = path.join(__dirname, '..', `listing-${listingId}.html`);
+  
+  // Check if file exists
+  if (require('fs').existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).json({ error: 'Listing not found' });
+  }
+});
+
+// Serve other HTML pages
+app.get('/booking.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'booking.html'));
+});
+
+app.get('/search-results.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'search-results.html'));
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err.stack);
