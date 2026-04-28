@@ -115,13 +115,31 @@ app.get('/listing-detail.js', (req, res) => {
 app.get('/booking.js', (req, res) => {
   console.log('Serving booking.js');
   res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(path.join(__dirname, 'booking.js'));
+  const serverPath = path.join(__dirname, 'booking.js');
+  const rootPath = path.join(__dirname, '..', 'booking.js');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 app.get('/search-results.js', (req, res) => {
   console.log('Serving search-results.js');
   res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(path.join(__dirname, 'search-results.js'));
+  const serverPath = path.join(__dirname, 'search-results.js');
+  const rootPath = path.join(__dirname, '..', 'search-results.js');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 app.get('/api-client.js', (req, res) => {
