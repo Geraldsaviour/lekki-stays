@@ -84,7 +84,16 @@ app.get('/search-results.css', (req, res) => {
 app.get('/script.js', (req, res) => {
   console.log('Serving script.js');
   res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(path.join(__dirname, 'script.js'));
+  const serverPath = path.join(__dirname, 'script.js');
+  const rootPath = path.join(__dirname, '..', 'script.js');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 app.get('/listing-detail.js', (req, res) => {
