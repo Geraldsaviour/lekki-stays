@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "migrate": "node migrate-to-firebase.js",
     "test": "node final-test.js",
     "test:performance": "node test-performance.js",
     "test:load": "node load-test.js --suite",
