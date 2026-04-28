@@ -373,27 +373,29 @@ body {
 
 /* Calendar Dropdown */
 .calendar-dropdown {
-    position: absolute;
-    top: 0;
-    right: 100%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateX(10px);
     background: white;
     border-radius: 12px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     padding: 1.5rem;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(10px);
     transition: all 0.3s ease;
     border: 1px solid rgba(0, 0, 0, 0.05);
     z-index: 1000;
-    margin-right: 1rem;
-    width: 650px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .calendar-dropdown.active {
     opacity: 1;
     visibility: visible;
-    transform: translateX(0);
+    transform: translate(-50%, -50%);
 }
 
 .calendar-header {
@@ -787,24 +789,6 @@ body {
     .booking-panel {
         position: static;
         order: -1;
-    }
-
-    .calendar-dropdown {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        right: auto;
-        transform: translate(-50%, -50%);
-        width: 90vw;
-        max-width: 400px;
-        max-height: 80vh;
-        overflow-y: auto;
-        z-index: 2000;
-        margin-right: 0;
-    }
-
-    .calendar-dropdown.active {
-        transform: translate(-50%, -50%);
     }
 
     .calendar-grids {
