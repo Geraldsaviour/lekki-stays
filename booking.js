@@ -721,7 +721,19 @@ const havenListings = [
 ];
 
 // === PENDING BOOKINGS MANAGEMENT ===
-function loadPendingBookings() {
+// NOTE: This section is for ADMIN/HOST use only, not for guests
+// Guests should not see pending bookings on the booking page
+// This functionality should be moved to a separate admin dashboard
+
+async function loadPendingBookings() {
+    // This function is disabled for guest booking page
+    // Pending bookings should only be visible to admin/host
+    // Host receives booking notifications via WhatsApp with confirm/decline links
+    
+    console.log('Pending bookings section disabled - Host manages bookings via WhatsApp');
+    return;
+    
+    /* ORIGINAL CODE - COMMENTED OUT
     const bookingManager = new BookingManager();
     const allBookings = bookingManager.getAllBookings();
     
@@ -750,6 +762,7 @@ function loadPendingBookings() {
         const bookingCard = createBookingCard(booking);
         bookingsList.appendChild(bookingCard);
     });
+    */
 }
 
 function createBookingCard(booking) {
