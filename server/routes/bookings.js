@@ -591,7 +591,7 @@ router.get('/:id/decline', requireAdmin, async (req, res) => {
       `);
     }
     
-    const booking = Booking.getById(id);
+    const booking = await Booking.getById(id);
     
     if (!booking) {
       return res.status(404).send(`
@@ -631,10 +631,10 @@ router.get('/:id/decline', requireAdmin, async (req, res) => {
     }
     
     // Decline booking
-    booking.updateStatus('cancelled');
+    await booking.updateStatus('cancelled');
     
     // Get apartment details
-    const apartment = Apartment.getById(booking.apartmentId);
+    const apartment = await Apartment.getById(booking.apartmentId);
     
     // Generate guest decline WhatsApp link
     const guestDeclineLink = WhatsAppNotifier.generateGuestDeclineLink(booking, apartment);
