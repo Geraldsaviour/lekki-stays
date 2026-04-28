@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
+const { connect } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
