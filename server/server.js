@@ -28,7 +28,17 @@ app.get('/styles.css', (req, res) => {
 app.get('/listing-detail.css', (req, res) => {
   console.log('Serving listing-detail.css');
   res.setHeader('Content-Type', 'text/css');
-  res.sendFile(path.join(__dirname, 'listing-detail.css'));
+  // Try server directory first, then root
+  const serverPath = path.join(__dirname, 'listing-detail.css');
+  const rootPath = path.join(__dirname, '..', 'listing-detail.css');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 app.get('/booking.css', (req, res) => {
@@ -53,7 +63,17 @@ app.get('/script.js', (req, res) => {
 app.get('/listing-detail.js', (req, res) => {
   console.log('Serving listing-detail.js');
   res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(path.join(__dirname, 'listing-detail.js'));
+  // Try server directory first, then root
+  const serverPath = path.join(__dirname, 'listing-detail.js');
+  const rootPath = path.join(__dirname, '..', 'listing-detail.js');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 app.get('/booking.js', (req, res) => {
