@@ -71,10 +71,22 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`🔐 Lekki Stays Admin Dashboard running on port ${PORT}`);
-  console.log(`🌐 Visit: http://localhost:${PORT}`);
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-});
+async function startServer() {
+  try {
+    // Connect to MongoDB
+    await connect();
+    
+    app.listen(PORT, () => {
+      console.log(`🔐 Lekki Stays Admin Dashboard running on port ${PORT}`);
+      console.log(`🌐 Visit: http://localhost:${PORT}`);
+      console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
 
 module.exports = app;
