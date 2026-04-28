@@ -848,6 +848,11 @@ function createBookingCard(booking) {
 }
 
 function confirmBooking(bookingId) {
+    // This function is disabled - bookings are confirmed via WhatsApp links by host
+    console.log('Direct booking confirmation disabled - use WhatsApp confirmation links');
+    alert('Bookings are confirmed by the host via WhatsApp. Please check your WhatsApp for confirmation.');
+    
+    /* ORIGINAL CODE - COMMENTED OUT
     if (!confirm('Are you sure you want to confirm this booking?')) {
         return;
     }
@@ -876,9 +881,15 @@ function confirmBooking(bookingId) {
     } else {
         alert('Failed to confirm booking: ' + result.message);
     }
+    */
 }
 
 function declineBooking(bookingId) {
+    // This function is disabled - bookings are declined via WhatsApp links by host
+    console.log('Direct booking decline disabled - use WhatsApp decline links');
+    alert('Bookings are managed by the host via WhatsApp. Please contact us if you need to cancel.');
+    
+    /* ORIGINAL CODE - COMMENTED OUT
     if (!confirm('Are you sure you want to decline this booking?')) {
         return;
     }
@@ -907,6 +918,7 @@ function declineBooking(bookingId) {
     } else {
         alert('Failed to decline booking: ' + result.message);
     }
+    */
 }
 
 function sendConfirmationMessage(booking, status) {
