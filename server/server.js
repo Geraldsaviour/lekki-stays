@@ -53,13 +53,31 @@ app.get('/listing-detail.css', (req, res) => {
 app.get('/booking.css', (req, res) => {
   console.log('Serving booking.css');
   res.setHeader('Content-Type', 'text/css');
-  res.sendFile(path.join(__dirname, 'booking.css'));
+  const serverPath = path.join(__dirname, 'booking.css');
+  const rootPath = path.join(__dirname, '..', 'booking.css');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 app.get('/search-results.css', (req, res) => {
   console.log('Serving search-results.css');
   res.setHeader('Content-Type', 'text/css');
-  res.sendFile(path.join(__dirname, 'search-results.css'));
+  const serverPath = path.join(__dirname, 'search-results.css');
+  const rootPath = path.join(__dirname, '..', 'search-results.css');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 // Explicit routes for JS files
