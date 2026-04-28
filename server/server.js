@@ -17,16 +17,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from project root with proper MIME types
-app.use(express.static(path.join(__dirname, '..'), {
-  setHeaders: (res, path) => {
-    if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    } else if (path.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    }
-  }
-}));
+// Serve static files from project root
+app.use(express.static(path.join(__dirname, '..')));
+
+// Debug middleware to log all requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} - ${req.get('Accept')}`);
+  next();
+});
 
 // Explicit routes for main static files
 // Explicit routes for ALL static files to ensure they load properly
