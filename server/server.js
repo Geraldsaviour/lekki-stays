@@ -75,6 +75,38 @@ app.get('/api-client.js', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'api-client.js'));
 });
 
+// Catch-all route for other static files (images, fonts, etc.)
+app.get('*.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)', (req, res) => {
+  const filePath = path.join(__dirname, '..', req.path);
+  
+  if (fs.existsSync(filePath)) {
+    // Set appropriate content type
+    const ext = path.extname(req.path).toLowerCase();
+    const contentTypes = {
+      '.css': 'text/css',
+      '.js': 'application/javascript',
+      '.png': 'image/png',
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.gif': 'image/gif',
+      '.ico': 'image/x-icon',
+      '.svg': 'image/svg+xml',
+      '.woff': 'font/woff',
+      '.woff2': 'font/woff2',
+      '.ttf': 'font/ttf',
+      '.eot': 'application/vnd.ms-fontobject'
+    };
+    
+    if (contentTypes[ext]) {
+      res.setHeader('Content-Type', contentTypes[ext]);
+    }
+    
+    res.sendFile(filePath);
+  } else {
+    res.status(404).json({ error: 'File not found' });
+  }
+});
+
 // API Routes
 app.use('/api/apartments', require('./routes/apartments'));
 app.use('/api/bookings', require('./routes/bookings'));
