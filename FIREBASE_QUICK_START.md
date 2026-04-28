@@ -1,56 +1,53 @@
 # 🚀 Firebase Quick Start - Lekki Stays
 
-## What You Need to Do
+## ✅ Firebase Project Created!
 
-### 1️⃣ Create Firebase Project (5 minutes)
-1. Go to https://console.firebase.google.com/
-2. Click "Add project"
-3. Name it "Lekki Stays"
-4. Disable Google Analytics
-5. Click "Create project"
+**Project Name:** lekki-stays  
+**Project ID:** lekki-stays  
+**Console:** https://console.firebase.google.com/project/lekki-stays
 
-### 2️⃣ Register Web App (2 minutes)
-1. Click the Web icon (`</>`)
-2. Name it "Lekki Stays Web"
-3. Check "Firebase Hosting"
-4. Click "Register app"
-5. **COPY the firebaseConfig object**
+---
 
-### 3️⃣ Update Your Config (1 minute)
-Open `firebase-config.js` and paste YOUR config:
+## 📋 Current Status
 
-```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abc123"
-};
+### ✅ Completed
+- [x] Firebase project created
+- [x] Web app registered
+- [x] Configuration updated in `firebase-config.js`
+- [x] Environment variables added to `server/.env`
 
-export default firebaseConfig;
-```
+### 🔄 Next Steps
 
-### 4️⃣ Enable Firestore (3 minutes)
-1. Go to **Build** → **Firestore Database**
-2. Click "Create database"
-3. Choose "Production mode"
-4. Select location: "eur3 (europe-west)"
-5. Click "Enable"
+---
 
-### 5️⃣ Set Security Rules (1 minute)
-Go to **Rules** tab and paste:
+## 1️⃣ Enable Firestore Database (3 minutes)
+
+1. Go to: https://console.firebase.google.com/project/lekki-stays/firestore
+2. Click **"Create database"**
+3. Choose **"Production mode"**
+4. Select location: **"eur3 (europe-west)"** or closest to Nigeria
+5. Click **"Enable"**
+
+---
+
+## 2️⃣ Set Security Rules (1 minute)
+
+Once Firestore is enabled:
+
+1. Go to **Rules** tab
+2. Replace with this:
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Apartments - public read, admin write
     match /apartments/{apartmentId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
     
+    // Bookings - anyone can create, admin can read/update
     match /bookings/{bookingId} {
       allow create: if true;
       allow read, update: if request.auth != null;
@@ -59,13 +56,18 @@ service cloud.firestore {
 }
 ```
 
-Click "Publish"
+3. Click **"Publish"**
 
-### 6️⃣ Add Sample Apartment (2 minutes)
-1. In Firestore, click "Start collection"
+---
+
+## 3️⃣ Add Sample Data (Optional - 2 minutes)
+
+In Firestore console:
+
+1. Click **"Start collection"**
 2. Collection ID: `apartments`
 3. Auto-generate Document ID
-4. Add these fields:
+4. Add fields:
 
 ```
 name: "Luxury 2BR Lekki Phase 1"
@@ -74,44 +76,44 @@ price: 45000
 bedrooms: 2
 bathrooms: 2
 maxGuests: 4
-description: "Modern apartment with pool"
-amenities: ["wifi", "pool", "kitchen", "ac"]
+description: "Modern apartment with pool and gym"
+amenities: ["wifi", "pool", "kitchen", "ac", "gym"]
 images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"]
 available: true
 createdAt: (timestamp - current time)
 ```
 
-### 7️⃣ Install Firebase CLI (2 minutes)
+---
+
+## 4️⃣ Install Firebase CLI (2 minutes)
+
 ```bash
 npm install -g firebase-tools
 firebase login
 ```
 
-### 8️⃣ Initialize Project (2 minutes)
+---
+
+## 5️⃣ Initialize Firebase in Project (2 minutes)
+
 ```bash
 firebase init
 ```
 
-Select:
+**Select:**
 - ✅ Firestore
 - ✅ Hosting
 
-Settings:
-- Public directory: `.` (press Enter)
+**Settings:**
+- Firestore rules: `firestore.rules` (default)
+- Firestore indexes: `firestore.indexes.json` (default)
+- Public directory: `public`
 - Single-page app: `No`
 - Overwrite files: `No`
 
-### 9️⃣ Deploy (1 minute)
-```bash
-firebase deploy
-```
-
-### 🎉 Done!
-Your site is live at: `https://your-project.web.app`
-
 ---
 
-## Testing Locally
+## 6️⃣ Test Locally (Optional)
 
 ```bash
 firebase serve
@@ -121,10 +123,60 @@ Open: http://localhost:5000
 
 ---
 
-## Need Help?
+## 7️⃣ Deploy to Firebase Hosting
 
-See full guide: `docs/FIREBASE_SETUP_GUIDE.md`
+```bash
+firebase deploy
+```
+
+Your site will be live at: **https://lekki-stays.web.app**
 
 ---
 
-## Total Time: ~20 minutes ⏱️
+## 🔧 Your Firebase Configuration
+
+Already configured in `firebase-config.js`:
+
+```javascript
+const firebaseConfig = {
+  apiKey: "AIzaSyA8moQvtYRObBsuNlU52uN9nDIXCCq0Mfs",
+  authDomain: "lekki-stays.firebaseapp.com",
+  projectId: "lekki-stays",
+  storageBucket: "lekki-stays.firebasestorage.app",
+  messagingSenderId: "879597470658",
+  appId: "1:879597470658:web:9dce2da8c0413ba01e0c5b"
+};
+```
+
+---
+
+## 🎯 What to Do RIGHT NOW
+
+### Option A: Use SQLite (Recommended - Already Working!)
+Your server is already configured with SQLite. Just run:
+
+```bash
+cd server
+npm run dev
+```
+
+Visit: http://localhost:3000
+
+### Option B: Add Firebase (For Real-time Features)
+1. Enable Firestore (step 1 above)
+2. Set security rules (step 2 above)
+3. Update your code to use Firebase instead of SQLite
+
+---
+
+## 📚 Need More Help?
+
+- **Full Firebase Guide:** `docs/FIREBASE_SETUP_GUIDE.md`
+- **Admin Dashboard:** `admin/START_HERE.md`
+- **Server Setup:** `server/README.md`
+
+---
+
+## ⏱️ Total Time: ~10 minutes
+
+**Most Important:** Start your server and test the booking flow first!
