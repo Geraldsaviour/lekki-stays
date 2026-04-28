@@ -48,13 +48,25 @@ class Booking {
       ...sanitizedData
     };
     
+    console.log('💾 Saving booking to database:', booking);
+    
     const success = operations.createBooking(booking);
     
-    if (success) {
-      return Booking.getById(id);
+    if (!success) {
+      throw new Error('Failed to save booking to database');
     }
     
-    throw new Error('Failed to create booking in database');
+    console.log('✅ Booking saved successfully, retrieving from database...');
+    
+    const savedBooking = Booking.getById(id);
+    
+    if (!savedBooking) {
+      console.error('❌ Failed to retrieve booking after save:', id);
+      throw new Error('Failed to retrieve booking after creation');
+    }
+    
+    console.log('✅ Booking retrieved successfully:', savedBooking.id);
+    return savedBooking;
   }
 
   static getById(id) {

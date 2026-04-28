@@ -31,10 +31,25 @@ class SimpleDB {
   
   saveData(filePath, data) {
     try {
+      // Ensure directory exists
+      const dir = path.dirname(filePath);
+      if (!fs.existsSync(dir)) {
+        console.log(`📁 Creating directory: ${dir}`);
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      
+      console.log(`💾 Writing to file: ${filePath}`);
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+      console.log(`✅ File saved successfully: ${filePath}`);
       return true;
     } catch (error) {
-      console.error(`Error saving ${filePath}:`, error);
+      console.error(`❌ Error saving ${filePath}:`, error);
+      console.error('Error details:', {
+        code: error.code,
+        errno: error.errno,
+        syscall: error.syscall,
+        path: error.path
+      });
       return false;
     }
   }
