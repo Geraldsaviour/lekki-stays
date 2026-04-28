@@ -147,101 +147,102 @@ class SimpleDB {
 // Initialize database
 const db = new SimpleDB();
 
-// Seed apartments if empty
-if (db.apartments.length === 0) {
-  const seedApartments = [
-    {
-      id: 1,
-      name: "Haven Lekki - Studio",
-      type: "cozy homes",
-      description: "A sleek modern studio in the heart of Lekki Phase 1. Perfect for business travelers and couples seeking luxury accommodation with easy access to Victoria Island and Ikoyi.",
-      maxGuests: 2,
-      bedrooms: 1,
-      bathrooms: 1,
-      pricePerNight: 45000,
-      amenities: ["Swimming pool", "Kitchen", "Air conditioning", "WiFi", "Smart TV", "Hot water", "Security"],
-      photos: [
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80"
-      ],
-      location: "15 Admiralty Way, Lekki Phase 1, Lagos",
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      id: 2,
-      name: "The Metropolis Lekki - Studio",
-      type: "luxury suites",
-      description: "Luxurious two-bedroom suite in the prestigious Metropolis development. Features modern amenities and stunning city views, perfect for families and business groups.",
-      maxGuests: 4,
-      bedrooms: 2,
-      bathrooms: 2,
-      pricePerNight: 75000,
-      amenities: ["Swimming pool", "Gym", "Kitchen", "WiFi", "Smart TV", "Balcony", "Concierge", "Parking"],
-      photos: [
-        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80",
-        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2058&q=80",
-        "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-      ],
-      location: "Plot 1415, Adetokunbo Ademola Street, Victoria Island, Lagos",
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      id: 3,
-      name: "Victoria Island Penthouse",
-      type: "premium stays",
-      description: "Stunning three-bedroom penthouse with panoramic views of Lagos lagoon. Features premium finishes, spacious living areas, and exclusive access to rooftop terrace.",
-      maxGuests: 6,
-      bedrooms: 3,
-      bathrooms: 3,
-      pricePerNight: 120000,
-      amenities: ["Swimming pool", "Kitchen", "Air conditioning", "Balcony", "Rooftop terrace", "WiFi", "Smart TV", "Gym", "Concierge"],
-      photos: [
-        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        "https://images.unsplash.com/photo-1574180045827-681f8a1a9622?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80"
-      ],
-      location: "1161 Memorial Drive, Victoria Island, Lagos",
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      id: 4,
-      name: "Ikoyi Executive Suite",
-      type: "executive homes",
-      description: "Executive two-bedroom suite in the prestigious Ikoyi district. Ideal for business executives and discerning travelers seeking sophistication and convenience.",
-      maxGuests: 3,
-      bedrooms: 2,
-      bathrooms: 2,
-      pricePerNight: 85000,
-      amenities: ["Gym", "Kitchen", "WiFi", "Parking", "Air conditioning", "Smart TV", "Security", "Workspace"],
-      photos: [
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80",
-        "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-      ],
-      location: "23 Kingsway Road, Ikoyi, Lagos",
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
-  ];
-  
-  db.apartments = seedApartments;
-  db.saveData(db.apartmentsFile, db.apartments);
-  console.log('✅ Seeded apartments data');
-}
-
 // Initialize function
 function initialize() {
   return new Promise((resolve) => {
     console.log('🗄️  Initializing simple JSON database...');
-    console.log('✅ Database initialized successfully');
+    
+    // Seed apartments if empty
+    if (db.apartments.length === 0) {
+      const seedApartments = [
+        {
+          id: 1,
+          name: "Haven Lekki - Studio",
+          type: "cozy homes",
+          description: "A sleek modern studio in the heart of Lekki Phase 1. Perfect for business travelers and couples seeking luxury accommodation with easy access to Victoria Island and Ikoyi.",
+          maxGuests: 2,
+          bedrooms: 1,
+          bathrooms: 1,
+          pricePerNight: 45000,
+          amenities: ["Swimming pool", "Kitchen", "Air conditioning", "WiFi", "Smart TV", "Hot water", "Security"],
+          photos: [
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+            "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80"
+          ],
+          location: "15 Admiralty Way, Lekki Phase 1, Lagos",
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 2,
+          name: "The Metropolis Lekki - Studio",
+          type: "luxury suites",
+          description: "Luxurious two-bedroom suite in the prestigious Metropolis development. Features modern amenities and stunning city views, perfect for families and business groups.",
+          maxGuests: 4,
+          bedrooms: 2,
+          bathrooms: 2,
+          pricePerNight: 75000,
+          amenities: ["Swimming pool", "Gym", "Kitchen", "WiFi", "Smart TV", "Balcony", "Concierge", "Parking"],
+          photos: [
+            "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80",
+            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2058&q=80",
+            "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+          ],
+          location: "Plot 1415, Adetokunbo Ademola Street, Victoria Island, Lagos",
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 3,
+          name: "Victoria Island Penthouse",
+          type: "premium stays",
+          description: "Stunning three-bedroom penthouse with panoramic views of Lagos lagoon. Features premium finishes, spacious living areas, and exclusive access to rooftop terrace.",
+          maxGuests: 6,
+          bedrooms: 3,
+          bathrooms: 3,
+          pricePerNight: 120000,
+          amenities: ["Swimming pool", "Kitchen", "Air conditioning", "Balcony", "Rooftop terrace", "WiFi", "Smart TV", "Gym", "Concierge"],
+          photos: [
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+            "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+            "https://images.unsplash.com/photo-1574180045827-681f8a1a9622?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80"
+          ],
+          location: "1161 Memorial Drive, Victoria Island, Lagos",
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 4,
+          name: "Ikoyi Executive Suite",
+          type: "executive homes",
+          description: "Executive two-bedroom suite in the prestigious Ikoyi district. Ideal for business executives and discerning travelers seeking sophistication and convenience.",
+          maxGuests: 3,
+          bedrooms: 2,
+          bathrooms: 2,
+          pricePerNight: 85000,
+          amenities: ["Gym", "Kitchen", "WiFi", "Parking", "Air conditioning", "Smart TV", "Security", "Workspace"],
+          photos: [
+            "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80",
+            "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+          ],
+          location: "23 Kingsway Road, Ikoyi, Lagos",
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      ];
+      
+      db.apartments = seedApartments;
+      db.saveData(db.apartmentsFile, db.apartments);
+      console.log('✅ Seeded apartments data');
+    }
+    
+    console.log(`✅ Database initialized successfully (${db.apartments.length} apartments, ${db.bookings.length} bookings)`);
     resolve();
   });
 }
