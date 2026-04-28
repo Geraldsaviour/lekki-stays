@@ -1,4 +1,4 @@
-const { operations } = require('../db-simple');
+const { operations } = require('../db-mongo');
 
 class Apartment {
   constructor(data) {
@@ -19,43 +19,49 @@ class Apartment {
   }
 
   // Static methods for database operations
-  static getAll() {
-    const apartments = operations.getAllApartments();
+  static async getAll() {
+    const apartments = await operations.getAllApartments();
     return apartments.map(data => new Apartment(data));
   }
 
-  static getById(id) {
-    const data = operations.getApartmentById(id);
+  static async getById(id) {
+    const data = await operations.getApartmentById(id);
     return data ? new Apartment(data) : null;
   }
 
-  static getAvailable(checkin, checkout, guests = null) {
-    const apartments = operations.getAllApartments();
+  static async getAvailable(checkin, checkout, guests = null) {
+    const apartments = await operations.getAllApartments();
     
-    return apartments.filter(apartmentData => {
+    const available = [];
+    for (const apartmentData of apartments) {
       const apartment = new Apartment(apartmentData);
       
       // Check guest capacity if specified
       if (guests && apartment.maxGuests < guests) {
-        return false;
+        continue;
       }
       
       // Check availability for the date range
       if (checkin && checkout) {
-        return operations.checkAvailability(apartment.id, checkin, checkout);
+        const isAvailable = await operations.checkAvailability(apartment.id, checkin, checkout);
+        if (isAvailable) {
+          available.push(apartment);
+        }
+      } else {
+        available.push(apartment);
       }
-      
-      return true;
-    }).map(data => new Apartment(data));
+    }
+    
+    return available;
   }
 
   // Instance methods
-  isAvailable(checkin, checkout) {
-    return operations.checkAvailability(this.id, checkin, checkout);
+  async isAvailable(checkin, checkout) {
+    return await operations.checkAvailability(this.id, checkin, checkout);
   }
 
-  getBookedDates() {
-    return operations.getBookedDates(this.id);
+  async getBookedDates() {
+    return await operations.getBookedDates(this.id);
   }
 
   calculatePricing(checkin, checkout) {
