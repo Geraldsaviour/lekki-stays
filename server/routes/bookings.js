@@ -369,7 +369,7 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     
-    const booking = Booking.getById(id);
+    const booking = await Booking.getById(id);
     
     if (!booking) {
       return res.status(404).json({
@@ -379,7 +379,7 @@ router.get('/:id', async (req, res) => {
     }
     
     // Get apartment details
-    const apartment = Apartment.getById(booking.apartmentId);
+    const apartment = await Apartment.getById(booking.apartmentId);
     
     res.json({
       success: true,
@@ -410,7 +410,7 @@ router.put('/:id/status', async (req, res) => {
       });
     }
     
-    const booking = Booking.getById(id);
+    const booking = await Booking.getById(id);
     
     if (!booking) {
       return res.status(404).json({
@@ -437,7 +437,7 @@ router.put('/:id/status', async (req, res) => {
     }
     
     // Update booking status
-    const success = booking.updateStatus(status);
+    const success = await booking.updateStatus(status);
     
     if (!success) {
       return res.status(500).json({
