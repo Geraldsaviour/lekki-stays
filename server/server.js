@@ -174,32 +174,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve HTML pages from root directory
-app.get('/listing-*.html', (req, res) => {
-  const filename = req.path.substring(1); // Remove leading /
-  const rootPath = path.join(__dirname, '..', filename);
-  console.log(`Serving ${filename} from root: ${rootPath}`);
-  res.sendFile(rootPath);
-});
-
-app.get('/index.html', (req, res) => {
-  const rootPath = path.join(__dirname, '..', 'index.html');
-  console.log(`Serving index.html from root: ${rootPath}`);
-  res.sendFile(rootPath);
-});
-
-app.get('/booking.html', (req, res) => {
-  const rootPath = path.join(__dirname, '..', 'booking.html');
-  console.log(`Serving booking.html from root: ${rootPath}`);
-  res.sendFile(rootPath);
-});
-
-app.get('/search-results.html', (req, res) => {
-  const rootPath = path.join(__dirname, '..', 'search-results.html');
-  console.log(`Serving search-results.html from root: ${rootPath}`);
-  res.sendFile(rootPath);
-});
-
 // Explicit routes for main static files
 // API Routes
 app.use('/api/apartments', require('./routes/apartments'));
