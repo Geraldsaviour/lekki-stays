@@ -56,33 +56,17 @@ app.get('/api/debug/files', (req, res) => {
     'api-client.js'
   ];
   
-  // Check multiple possible locations
-  const locations = [
-    path.join(__dirname, '..'), // /var/task (parent of server)
-    __dirname, // /var/task/server
-    process.cwd(), // Current working directory
-    '/' // Root
-  ];
-  
-  const fileStatus = staticFiles.map(file => {
-    const checks = locations.map(loc => ({
-      location: loc,
-      fullPath: path.join(loc, file),
-      exists: fs.existsSync(path.join(loc, file))
-    }));
-    
-    return {
-      file,
-      checks
-    };
-  });
+  // Check in server directory where files should now be
+  const fileStatus = staticFiles.map(file => ({
+    file,
+    serverPath: path.join(__dirname, file),
+    exists: fs.existsSync(path.join(__dirname, file))
+  }));
   
   res.json({
     staticFiles: fileStatus,
-    __dirname,
-    'process.cwd()': process.cwd(),
-    'process.env.VERCEL': process.env.VERCEL,
-    'process.env.LAMBDA_TASK_ROOT': process.env.LAMBDA_TASK_ROOT
+    serverDir: __dirname,
+    message: "Files should now be in server directory"
   });
 });
 
