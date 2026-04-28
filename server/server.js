@@ -22,7 +22,16 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/styles.css', (req, res) => {
   console.log('Serving styles.css');
   res.setHeader('Content-Type', 'text/css');
-  res.sendFile(path.join(__dirname, 'styles.css'));
+  const serverPath = path.join(__dirname, 'styles.css');
+  const rootPath = path.join(__dirname, '..', 'styles.css');
+  
+  if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 app.get('/listing-detail.css', (req, res) => {
