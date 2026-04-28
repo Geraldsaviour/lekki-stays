@@ -53,7 +53,8 @@ app.get('/api/debug/files', (req, res) => {
     'listing-detail.js',
     'booking.js',
     'search-results.js',
-    'api-client.js'
+    'api-client.js',
+    'test.txt'
   ];
   
   // Check in server directory where files should now be
@@ -63,11 +64,26 @@ app.get('/api/debug/files', (req, res) => {
     exists: fs.existsSync(path.join(__dirname, file))
   }));
   
+  // Also list all files in server directory
+  let allFiles = [];
+  try {
+    allFiles = fs.readdirSync(__dirname);
+  } catch (e) {
+    allFiles = ['Error reading directory: ' + e.message];
+  }
+  
   res.json({
     staticFiles: fileStatus,
     serverDir: __dirname,
+    allFilesInServerDir: allFiles,
     message: "Files should now be in server directory"
   });
+});
+
+// Test endpoint to serve test.txt
+app.get('/test.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.sendFile(path.join(__dirname, 'test.txt'));
 });
 
 // Performance metrics endpoint
