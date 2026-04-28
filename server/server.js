@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const db = require('./db-simple');
 const { performanceMonitor, getMetrics, getHealthStatus } = require('./middleware/performance');
 
@@ -92,7 +93,7 @@ app.get('/listing-:id.html', (req, res) => {
   const filePath = path.join(__dirname, '..', `listing-${listingId}.html`);
   
   // Check if file exists
-  if (require('fs').existsSync(filePath)) {
+  if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
     res.status(404).json({ error: 'Listing not found' });
