@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { initialize, operations } = require('./db-mongo');
+const { initialize, operations } = require('./db'); // Using SQLite (simple & reliable)
 const { performanceMonitor, getMetrics, getHealthStatus } = require('./middleware/performance');
 
 const app = express();
