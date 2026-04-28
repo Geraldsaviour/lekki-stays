@@ -677,7 +677,7 @@ router.get('/:id/cancel', requireAdmin, async (req, res) => {
       `);
     }
     
-    const booking = Booking.getById(id);
+    const booking = await Booking.getById(id);
     
     if (!booking) {
       return res.status(404).send(`
@@ -735,10 +735,10 @@ router.get('/:id/cancel', requireAdmin, async (req, res) => {
     const refundAmount = booking.getRefundAmount();
     
     // Cancel booking
-    booking.updateStatus('cancelled');
+    await booking.updateStatus('cancelled');
     
     // Get apartment details
-    const apartment = Apartment.getById(booking.apartmentId);
+    const apartment = await Apartment.getById(booking.apartmentId);
     
     // Generate host cancellation alert and guest contact links
     const hostCancellationAlert = WhatsAppNotifier.generateHostCancellationAlert(booking, apartment, refundEligible);
@@ -782,7 +782,7 @@ router.get('/:id/guest-cancel', async (req, res) => {
       `);
     }
     
-    const booking = Booking.getById(id);
+    const booking = await Booking.getById(id);
     
     if (!booking) {
       return res.status(404).send(`
@@ -840,10 +840,10 @@ router.get('/:id/guest-cancel', async (req, res) => {
     const refundAmount = booking.getRefundAmount();
     
     // Cancel booking
-    booking.updateStatus('cancelled');
+    await booking.updateStatus('cancelled');
     
     // Get apartment details
-    const apartment = Apartment.getById(booking.apartmentId);
+    const apartment = await Apartment.getById(booking.apartmentId);
     
     // Generate host cancellation alert and guest contact links
     const hostCancellationAlert = WhatsAppNotifier.generateHostCancellationAlert(booking, apartment, refundEligible);
