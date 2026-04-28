@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isAuthenticated() && 
+             request.auth.token.admin == true;
+    }
+    
+    // Apartments Collection
+    // - Anyone can read apartments
+    // - Only admins can create/update/delete apartments
+    match /apartments/{apartmentId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Bookings Collection
+    // - Anyone can create bookings (for new reservations)
+    // - Only admins can read all bookings
+    // - Only admins can update/delete bookings
+    match /bookings/{bookingId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // Admins Collection
+    // - Only admins can read/write admin data
+    match /admins/{adminId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
