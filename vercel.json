@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "installCommand": "npm install",
   "builds": [
     {
       "src": "server/server.js",
@@ -15,10 +18,5 @@
       "src": "/(.*)",
       "dest": "/server/server.js"
     }
-  ],
-  "functions": {
-    "server/server.js": {
-      "maxDuration": 10
-    }
-  }
+  ]
 }
