@@ -123,7 +123,7 @@ class AvailabilityChecker {
    * @param {Function} bookingCallback - Callback to create booking if available
    * @returns {Object} Result with booking or availability info
    */
-  static checkAndBook(apartmentId, checkIn, checkOut, bookingCallback) {
+  static async checkAndBook(apartmentId, checkIn, checkOut, bookingCallback) {
     // Check availability with lock acquisition
     const availability = this.checkAvailability(apartmentId, checkIn, checkOut, true);
     
@@ -137,7 +137,7 @@ class AvailabilityChecker {
     
     try {
       // Execute booking creation callback
-      const booking = bookingCallback();
+      const booking = await bookingCallback();
       
       // Release lock after successful booking
       if (availability.lockKey) {

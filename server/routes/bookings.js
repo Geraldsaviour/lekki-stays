@@ -241,7 +241,7 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
     }
     
     // Check if apartment exists
-    const apartment = Apartment.getById(bookingData.apartmentId);
+    const apartment = await Apartment.getById(bookingData.apartmentId);
     if (!apartment) {
       console.warn(`❌ Apartment not found: ${bookingData.apartmentId}`);
       return res.status(404).json({
@@ -262,11 +262,11 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
     }
     
     // Check availability with race condition protection and atomic booking
-    const bookingResult = AvailabilityChecker.checkAndBook(
+    const bookingResult = await AvailabilityChecker.checkAndBook(
       bookingData.apartmentId,
       bookingData.checkIn,
       bookingData.checkOut,
-      () => {
+      async () => {
         // This callback executes only if availability is confirmed and locked
         
         // Calculate and validate pricing with tolerance for floating point precision
@@ -283,7 +283,7 @@ router.post('/', bookingRateLimit, sanitizeBookingInput, async (req, res) => {
         console.log(`🔄 Creating booking with ID: ${bookingId}`);
         
         // Create booking with atomic operation
-        const newBooking = Booking.create({
+        const newBooking = await Booking.create({
           id: bookingId,
           apartmentId: bookingData.apartmentId,
           guestName: bookingData.guestName,
