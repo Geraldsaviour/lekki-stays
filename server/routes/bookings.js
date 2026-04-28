@@ -493,7 +493,7 @@ router.get('/:id/confirm', requireAdmin, async (req, res) => {
       `);
     }
     
-    const booking = Booking.getById(id);
+    const booking = await Booking.getById(id);
     
     if (!booking) {
       return res.status(404).send(`
@@ -545,10 +545,10 @@ router.get('/:id/confirm', requireAdmin, async (req, res) => {
     }
     
     // Confirm booking
-    booking.updateStatus('confirmed');
+    await booking.updateStatus('confirmed');
     
     // Get apartment details
-    const apartment = Apartment.getById(booking.apartmentId);
+    const apartment = await Apartment.getById(booking.apartmentId);
     
     // Generate guest payment WhatsApp link
     const guestPaymentLink = WhatsAppNotifier.generateGuestPaymentLink(booking, apartment);
