@@ -319,7 +319,7 @@ app.use((req, res) => {
 });
 
 // Initialize database and start server
-db.initialize()
+initialize()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`🏨 Lekki Stays server running on port ${PORT}`);

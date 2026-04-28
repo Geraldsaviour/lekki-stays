@@ -1,4 +1,4 @@
-const { operations } = require('../db-simple');
+const { operations } = require('../db-mongo');
 const crypto = require('crypto');
 
 class Booking {
@@ -20,7 +20,7 @@ class Booking {
   }
 
   // Static methods for database operations with enhanced security
-  static create(bookingData) {
+  static async create(bookingData) {
     // Sanitize input data
     const sanitizedData = {
       ...bookingData,
@@ -50,7 +50,7 @@ class Booking {
     
     console.log('💾 Saving booking to database:', booking);
     
-    const success = operations.createBooking(booking);
+    const success = await operations.createBooking(booking);
     
     if (!success) {
       throw new Error('Failed to save booking to database');
@@ -58,7 +58,7 @@ class Booking {
     
     console.log('✅ Booking saved successfully, retrieving from database...');
     
-    const savedBooking = Booking.getById(id);
+    const savedBooking = await Booking.getById(id);
     
     if (!savedBooking) {
       console.error('❌ Failed to retrieve booking after save:', id);
@@ -69,16 +69,17 @@ class Booking {
     return savedBooking;
   }
 
-  static getById(id) {
-    const data = operations.getBookingById(id);
+  static async getById(id) {
+    const data = await operations.getBookingById(id);
     return data ? new Booking(data) : null;
   }
 
-  static getByToken(token) {
-    // For simple database, we need to search through all bookings
-    const { operations } = require('../db-simple');
-    const allBookings = operations.db.bookings;
-    const data = allBookings.find(booking => booking.token === token);
+  static async getByToken(token) {
+    // For MongoDB, we need to query the collection directly
+    const { MongoDatabase } = require('../db-mongo');
+    const db = MongoDatabase.getDb();
+    const collection = db.collection('bookings');
+    const data = await collection.findOne({ token: token });
     return data ? new Booking(data) : null;
   }
 
@@ -95,7 +96,7 @@ class Booking {
   }
 
   // Instance methods
-  updateStatus(newStatus) {
+  async updateStatus(newStatus) {
     let paymentDeadline = null;
     
     // Set payment deadline when confirming booking
@@ -105,7 +106,7 @@ class Booking {
       paymentDeadline = deadline.toISOString();
     }
     
-    const success = operations.updateBookingStatus(this.id, newStatus, paymentDeadline);
+    const success = await operations.updateBookingStatus(this.id, newStatus, paymentDeadline);
     
     if (success) {
       this.status = newStatus;
