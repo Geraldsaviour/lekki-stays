@@ -20,11 +20,12 @@ A modern, secure booking platform for luxury shortlet accommodations in Lagos, N
 ## 🛠️ Tech Stack
 
 - **Frontend:** HTML5, CSS3, JavaScript (Vanilla)
-- **Backend:** Node.js, Express.js
-- **Database:** SQLite with better-sqlite3
-- **Deployment:** Vercel
+- **Backend:** Node.js, Express.js (Optional - can use Firebase only)
+- **Database:** Firebase Firestore (NoSQL Cloud Database)
+- **Authentication:** Firebase Authentication
+- **Hosting:** Firebase Hosting
 - **Notifications:** WhatsApp Business API
-- **Security:** Rate limiting, XSS protection, Admin authentication
+- **Security:** Firebase Security Rules, Rate limiting, XSS protection
 
 ## 📱 How It Works
 
