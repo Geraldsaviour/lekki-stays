@@ -6,9 +6,8 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
-    "build": "echo 'No build step required for this project'",
-    "test": "echo 'Tests not implemented yet'",
-    "deploy": "vercel --prod"
+    "build": "echo 'No build step required'",
+    "vercel-build": "echo 'No build step required'"
   },
   "keywords": [
     "shortlet",
