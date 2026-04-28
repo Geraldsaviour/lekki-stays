@@ -4,31 +4,12 @@ node_modules/
 # Environment variables (NEVER commit these!)
 .env
 .env.local
+server/.env
 
-# Logs
-*.log
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Build directories
-dist/
-build/
-
-# Large files
-*.zip
-*.mp4
-*.mov
-
-# Kiro settings
-.kiro/settings/
-
-# Database files
+# Database files (keep structure, not data)
 *.db
 *.sqlite
 *.sqlite3
-data/*.db
 
 # Logs
 logs/
@@ -43,14 +24,42 @@ pids
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
+# OS generated files
+.DS_Store
+Thumbs.db
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Build directories
+dist/
+build/
+.next
+.nuxt
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Large files
+*.zip
+*.mp4
+*.mov
+
+# Backup files
+*.bak
+*.backup
+
+# Kiro settings
+.kiro/settings/
+
+# Coverage directory
 coverage/
-
-# nyc test coverage
 .nyc_output
-
-# Dependency directories
-jspm_packages/
 
 # Optional npm cache directory
 .npm
@@ -64,61 +73,5 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-
-# next.js build output
-.next
-
-# Nuxt.js build output
-.nuxt
-
-# vuepress build output
-.vuepress/dist
-
 # Serverless directories
 .serverless
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Backup files
-*.bak
-*.backup
-backup-*.sh
-*.old
-
-# Deployment files
-deployment-*.ps1
-deployment-*.sh
-monitor.sh
-system-monitor.sh
-restart-server.*
-nginx-config.conf
-fail2ban-jail.local
-logrotate-config
-ecosystem.config.js
-
-# Documentation (keep only essential ones)
-RESTART_SERVER_GUIDE.md
-SERVER_STATUS.md
-SERVER_RESTART_COMPLETE.md
-QUICK_START.md
-BOOKING_FLOW.md
-FIXES_APPLIED.md
-WHATSAPP_WORKFLOW_GUIDE.md
-FRONTEND_FIXES.md
-DEPLOYMENT_SUMMARY.md
