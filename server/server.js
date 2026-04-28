@@ -56,16 +56,33 @@ app.get('/api/debug/files', (req, res) => {
     'api-client.js'
   ];
   
-  const fileStatus = staticFiles.map(file => ({
-    file,
-    exists: fs.existsSync(path.join(__dirname, '..', file)),
-    path: path.join(__dirname, '..', file)
-  }));
+  // Check multiple possible locations
+  const locations = [
+    path.join(__dirname, '..'), // /var/task (parent of server)
+    __dirname, // /var/task/server
+    process.cwd(), // Current working directory
+    '/' // Root
+  ];
+  
+  const fileStatus = staticFiles.map(file => {
+    const checks = locations.map(loc => ({
+      location: loc,
+      fullPath: path.join(loc, file),
+      exists: fs.existsSync(path.join(loc, file))
+    }));
+    
+    return {
+      file,
+      checks
+    };
+  });
   
   res.json({
     staticFiles: fileStatus,
     __dirname,
-    parentDir: path.join(__dirname, '..')
+    'process.cwd()': process.cwd(),
+    'process.env.VERCEL': process.env.VERCEL,
+    'process.env.LAMBDA_TASK_ROOT': process.env.LAMBDA_TASK_ROOT
   });
 });
 
