@@ -282,26 +282,18 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-// Serve individual listing pages
-app.get('/listing-:id.html', (req, res) => {
-  const listingId = req.params.id;
-  const filePath = path.join(__dirname, '..', `listing-${listingId}.html`);
+// Catch-all route for HTML files - MUST be before 404 handler
+app.get('*.html', (req, res) => {
+  const filename = req.path.substring(1); // Remove leading /
+  const filePath = path.join(__dirname, '..', filename);
   
-  // Check if file exists
+  console.log(`Attempting to serve HTML: ${filename} from ${filePath}`);
+  
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
-    res.status(404).json({ error: 'Listing not found' });
+    res.status(404).json({ error: 'Page not found' });
   }
-});
-
-// Serve other HTML pages
-app.get('/booking.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'booking.html'));
-});
-
-app.get('/search-results.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'search-results.html'));
 });
 
 // Error handling middleware
