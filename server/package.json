@@ -1,5 +1,5 @@
 {
-  "name": "lekki-stays-backend",
+  "name": "lekkistays-backend",
   "version": "1.0.0",
   "description": "Backend server for Lekki Stays luxury shortlet booking platform",
   "main": "server.js",
