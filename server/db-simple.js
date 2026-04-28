@@ -8,9 +8,23 @@ class SimpleDB {
     this.apartmentsFile = path.join(this.dataDir, 'apartments.json');
     this.bookingsFile = path.join(this.dataDir, 'bookings.json');
     
-    // Ensure data directory exists
-    if (!fs.existsSync(this.dataDir)) {
-      fs.mkdirSync(this.dataDir, { recursive: true });
+    // Check if we're on Vercel (ephemeral filesystem)
+    this.isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV;
+    
+    if (this.isVercel) {
+      console.log('⚠️  Running on Vercel - using in-memory database (data will not persist)');
+      this.useInMemory = true;
+    } else {
+      // Ensure data directory exists
+      if (!fs.existsSync(this.dataDir)) {
+        console.log(`📁 Creating data directory: ${this.dataDir}`);
+        try {
+          fs.mkdirSync(this.dataDir, { recursive: true });
+        } catch (error) {
+          console.warn(`⚠️  Could not create data directory: ${error.message}`);
+          this.useInMemory = true;
+        }
+      }
     }
     
     this.apartments = this.loadData(this.apartmentsFile, []);
@@ -19,18 +33,29 @@ class SimpleDB {
   
   loadData(filePath, defaultValue) {
     try {
+      if (this.useInMemory) {
+        console.log(`📦 Using in-memory storage for: ${path.basename(filePath)}`);
+        return defaultValue;
+      }
+      
       if (fs.existsSync(filePath)) {
         const data = fs.readFileSync(filePath, 'utf8');
+        console.log(`✅ Loaded data from: ${filePath}`);
         return JSON.parse(data);
       }
     } catch (error) {
-      console.error(`Error loading ${filePath}:`, error);
+      console.error(`❌ Error loading ${filePath}:`, error.message);
     }
     return defaultValue;
   }
   
   saveData(filePath, data) {
     try {
+      if (this.useInMemory) {
+        console.log(`📦 Saved to in-memory storage: ${path.basename(filePath)}`);
+        return true;
+      }
+      
       // Ensure directory exists
       const dir = path.dirname(filePath);
       if (!fs.existsSync(dir)) {
@@ -43,13 +68,21 @@ class SimpleDB {
       console.log(`✅ File saved successfully: ${filePath}`);
       return true;
     } catch (error) {
-      console.error(`❌ Error saving ${filePath}:`, error);
+      console.error(`❌ Error saving ${filePath}:`, error.message);
       console.error('Error details:', {
         code: error.code,
         errno: error.errno,
         syscall: error.syscall,
         path: error.path
       });
+      
+      // If we can't write to disk, fall back to in-memory
+      if (!this.useInMemory) {
+        console.warn('⚠️  Falling back to in-memory storage');
+        this.useInMemory = true;
+        return true;
+      }
+      
       return false;
     }
   }
