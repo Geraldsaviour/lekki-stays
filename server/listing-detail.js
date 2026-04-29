@@ -703,16 +703,22 @@ function formatDateFull(date) {
 }
 
 // ===== SMOOTH SCROLLING =====
+// Only apply smooth scrolling to same-page anchors (not cross-page navigation)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+        const href = this.getAttribute('href');
+        // Only prevent default for same-page anchors (not index.html#section)
+        if (!href.includes('index.html') && !href.includes('.html')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         }
+        // For cross-page navigation (index.html#section), let browser handle it naturally
     });
 });
 
