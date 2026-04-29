@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { initialize, operations } = require('./db'); // Using SQLite (simple & reliable)
 const { performanceMonitor, getMetrics, getHealthStatus } = require('./middleware/performance');
 
 const app = express();
@@ -178,8 +177,8 @@ app.use((req, res, next) => {
 // API Routes - Using Firebase
 app.use('/api/apartments', require('./routes/apartments-firebase'));
 app.use('/api/bookings', require('./routes/bookings-firebase'));
-app.use('/api/notifications', require('./routes/notifications'));
-app.use('/api/payments', require('./routes/payments'));
+app.use('/api/notifications', require('./routes/notifications-firebase'));
+app.use('/api/payments', require('./routes/payments-firebase'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
