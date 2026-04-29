@@ -1,34 +1,36 @@
+// Import Firebase modules
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getFirestore, collection, query, where, orderBy, getDocs, doc, getDoc, updateDoc, Timestamp, limit, startAfter } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { firebaseConfig } from '../firebase-config.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 // Global state
 let currentPage = 1;
 let currentStatus = 'all';
 let currentSearch = '';
 let currentBookingId = null;
+let lastVisible = null;
+let allBookings = []; // Cache for filtering
 
 // Check authentication
 checkAuth();
 
 async function checkAuth() {
-    try {
-        const response = await fetch('/api/auth/me', {
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            window.location.href = '/';
-            return;
-        }
-
-        const data = await response.json();
-        if (data.success && data.admin) {
-            document.getElementById('adminName').textContent = data.admin.name;
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in
+            document.getElementById('adminName').textContent = user.email || 'Admin';
             loadDashboard();
         } else {
-            window.location.href = '/';
+            // User is signed out, redirect to login
+            window.location.href = 'login.html';
         }
-    } catch (error) {
-        console.error('Auth check error:', error);
-        window.location.href = '/';
-    }
+    });
 }
 
 // Load dashboard data
@@ -40,19 +42,29 @@ async function loadDashboard() {
 // Load statistics
 async function loadStats() {
     try {
-        const response = await fetch('/api/bookings/stats', {
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            if (data.success) {
-                document.getElementById('statPending').textContent = data.stats.pending || 0;
-                document.getElementById('statConfirmed').textContent = data.stats.confirmed || 0;
-                document.getElementById('statPaid').textContent = data.stats.paid || 0;
-                document.getElementById('statCompleted').textContent = data.stats.completed || 0;
+        // Get all bookings from Firestore
+        const bookingsRef = collection(db, 'bookings');
+        const snapshot = await getDocs(bookingsRef);
+        
+        // Count by status
+        const stats = {
+            pending: 0,
+            confirmed: 0,
+            paid: 0,
+            completed: 0
+        };
+        
+        snapshot.forEach(doc => {
+            const booking = doc.data();
+            if (stats.hasOwnProperty(booking.status)) {
+                stats[booking.status]++;
             }
-        }
+        });
+        
+        document.getElementById('statPending').textContent = stats.pending;
+        document.getElementById('statConfirmed').textContent = stats.confirmed;
+        document.getElementById('statPaid').textContent = stats.paid;
+        document.getElementById('statCompleted').textContent = stats.completed;
     } catch (error) {
         console.error('Load stats error:', error);
     }
