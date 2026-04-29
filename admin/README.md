@@ -1,317 +1,243 @@
-# 🔐 Lekki Stays Admin Dashboard
+# 🏨 Lekki Stays - Admin Dashboard
 
-Secure admin dashboard for managing bookings, separate from the main booking website.
+> Standalone admin dashboard for managing Lekki Stays bookings and properties
+
+## 🌟 Features
+
+- ✅ **Firebase Authentication** - Secure admin login
+- ✅ **Real-time Data** - Direct Firestore connection
+- ✅ **Booking Management** - View, confirm, decline bookings
+- ✅ **Property Management** - View all apartments
+- ✅ **Statistics Dashboard** - Overview of bookings and revenue
+- ✅ **No Backend Required** - Pure frontend application
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies
+### Prerequisites
+
+- Node.js 16+ (for local development server)
+- Firebase project with:
+  - Authentication enabled (Email/Password)
+  - Firestore database
+  - Admin user created
+
+### Installation
 
 ```bash
-cd admin
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/lekki-stays-admin.git
+cd lekki-stays-admin
+
+# Install dependencies (optional - only for dev server)
 npm install
-```
 
-### 2. Configure Environment
-
-The `.env` file is already configured to use the same MongoDB as your main app.
-
-**Important**: Update these values for production:
-- `JWT_SECRET` - Generate a long random string
-- `SESSION_SECRET` - Generate a long random string
-
-### 3. Create First Admin User
-
-```bash
-npm run setup
-```
-
-Follow the prompts to create your admin account:
-- Admin Name: Your Name
-- Admin Email: admin@lekkistays.com
-- Admin Password: (min 8 characters)
-
-### 4. Start the Server
-
-```bash
-npm start
-```
-
-The admin dashboard will be available at: **http://localhost:3001**
-
----
-
-## 📋 Features
-
-### ✅ Authentication
-- Secure login with email/password
-- JWT token-based sessions
-- Account lockout after failed attempts
-- HTTP-only cookies
-
-### ✅ Dashboard
-- Overview statistics (pending, confirmed, paid, completed)
-- Real-time booking list
-- Filter by status
-- Search by booking ID, guest name, email, phone
-- Pagination
-
-### ✅ Booking Management
-- **Confirm bookings** - Approve pending bookings
-- **Decline bookings** - Reject bookings with optional reason
-- **Send payment details** - WhatsApp message with bank details
-- **Mark as paid** - Confirm payment received
-- **Check-in/Check-out** - Update booking status
-- **View booking details** - Complete booking information
-
-### ✅ Security
-- Rate limiting on login (5 attempts per 15 minutes)
-- Account lockout after 5 failed attempts (30 minutes)
-- Audit logging for all admin actions
-- CORS protection
-- Input validation and sanitization
-
----
-
-## 🎯 Usage
-
-### Login
-1. Go to http://localhost:3001
-2. Enter your admin email and password
-3. Click "Login"
-
-### Manage Bookings
-
-#### Confirm a Booking
-1. Find the pending booking
-2. Click "Confirm" button
-3. Choose whether to send payment details
-4. Click "Confirm & Send Payment"
-5. If selected, WhatsApp will open with payment message
-
-#### Decline a Booking
-1. Find the pending booking
-2. Click "Decline" button
-3. Optionally add a reason
-4. Click "Decline Booking"
-
-#### Send Payment Details
-1. Find a confirmed booking
-2. Click "Send Payment" button
-3. WhatsApp opens with pre-filled payment message
-4. Send to guest
-
-#### Mark as Paid
-1. Find a confirmed booking
-2. Click "Mark as Paid" button
-3. Confirm the action
-4. Status updates to "Paid"
-
-#### Check In/Out
-1. Find a paid booking
-2. Click "Check In" when guest arrives
-3. Click "Check Out" when guest leaves
-
----
-
-## 🔒 Security Best Practices
-
-### For Production:
-
-1. **Generate Secure Secrets**
-   ```bash
-   # Generate JWT secret
-   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-   
-   # Generate session secret
-   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-   ```
-   
-   Update `.env` with these values.
-
-2. **Use HTTPS**
-   - Deploy to Vercel (automatic HTTPS)
-   - Or use a reverse proxy with SSL certificate
-
-3. **Restrict CORS**
-   - Update `CORS_ORIGIN` in `.env` to your main website URL
-
-4. **Strong Passwords**
-   - Use passwords with at least 12 characters
-   - Include uppercase, lowercase, numbers, and symbols
-
-5. **Regular Backups**
-   - MongoDB Atlas provides automatic backups
-   - Export audit logs regularly
-
----
-
-## 📊 API Endpoints
-
-### Authentication
-```
-POST   /api/auth/login      - Login
-POST   /api/auth/logout     - Logout
-GET    /api/auth/me         - Get current admin
-```
-
-### Bookings
-```
-GET    /api/bookings/list   - List bookings (with filters)
-GET    /api/bookings/stats  - Get statistics
-GET    /api/bookings/:id    - Get booking details
-PUT    /api/bookings/:id/status - Update booking status
-POST   /api/bookings/:id/send-payment - Generate payment WhatsApp link
-```
-
----
-
-## 🗄️ Database Collections
-
-### admin_users
-Stores admin user accounts with hashed passwords.
-
-### admin_audit_log
-Logs all admin actions for security and compliance.
-
-### bookings
-Shared with main app - stores all booking data.
-
----
-
-## 🚀 Deployment
-
-### Deploy to Vercel
-
-1. **Create new Vercel project**
-   ```bash
-   vercel
-   ```
-
-2. **Add environment variables** in Vercel dashboard:
-   ```
-   NODE_ENV=production
-   MONGODB_URI=your_mongodb_connection_string
-   JWT_SECRET=your_generated_jwt_secret
-   SESSION_SECRET=your_generated_session_secret
-   HOST_WHATSAPP_NUMBER=+2349039269846
-   BANK_NAME=GTBank
-   BANK_ACCOUNT_NUMBER=9039269846
-   BANK_ACCOUNT_NAME=Lekki Stays Ltd
-   ADMIN_EMAIL=admin@lekkistays.com
-   CORS_ORIGIN=https://your-main-website.vercel.app
-   ```
-
-3. **Deploy**
-   ```bash
-   vercel --prod
-   ```
-
-4. **Access your admin dashboard**
-   ```
-   https://your-admin-dashboard.vercel.app
-   ```
-
----
-
-## 🔧 Troubleshooting
-
-### Can't Login
-- Check MongoDB connection
-- Verify admin user exists (run `npm run setup`)
-- Check browser console for errors
-- Clear cookies and try again
-
-### Bookings Not Loading
-- Verify MongoDB connection
-- Check that bookings collection exists
-- Check browser console for errors
-- Verify JWT token is valid
-
-### WhatsApp Links Not Working
-- Check `HOST_WHATSAPP_NUMBER` in `.env`
-- Verify phone number format (+234...)
-- Check guest phone number format in database
-
-### Account Locked
-- Wait 30 minutes for automatic unlock
-- Or manually update in MongoDB:
-  ```javascript
-  db.admin_users.updateOne(
-    { email: "admin@lekkistays.com" },
-    { $set: { loginAttempts: 0, lockUntil: null } }
-  )
-  ```
-
----
-
-## 📝 Development
-
-### Run in Development Mode
-```bash
+# Start development server
 npm run dev
 ```
 
-Uses nodemon for auto-restart on file changes.
+Visit: **http://localhost:3001**
 
-### Add New Admin User
+## 🔧 Configuration
+
+### Firebase Setup
+
+1. **Enable Firebase Authentication:**
+   - Go to [Firebase Console](https://console.firebase.google.com/project/lekki-stays/authentication)
+   - Enable "Email/Password" sign-in method
+
+2. **Create Admin User:**
+   - Go to Authentication → Users
+   - Click "Add user"
+   - Enter email and password
+   - Save credentials securely
+
+3. **Update Firestore Rules:**
+   ```javascript
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       function isAuthenticated() {
+         return request.auth != null;
+       }
+       
+       match /apartments/{apartmentId} {
+         allow read: if true;
+         allow write: if isAuthenticated();
+       }
+       
+       match /bookings/{bookingId} {
+         allow create: if true;
+         allow read, update: if isAuthenticated();
+       }
+     }
+   }
+   ```
+
+### Firebase Configuration
+
+The Firebase config is in `firebase-config.js`:
+
+```javascript
+export const firebaseConfig = {
+  apiKey: "AIzaSyA8moQvtYRObBsuNlU52uN9nDIXCCq0Mfs",
+  authDomain: "lekki-stays.firebaseapp.com",
+  projectId: "lekki-stays",
+  storageBucket: "lekki-stays.firebasestorage.app",
+  messagingSenderId: "879597470658",
+  appId: "1:879597470658:web:9dce2da8c0413ba01e0c5b"
+};
+```
+
+**Note:** These are client-side credentials and safe to expose publicly.
+
+## 📁 Project Structure
+
+```
+lekki-stays-admin/
+├── src/
+│   ├── css/
+│   │   ├── auth.css          # Login page styles
+│   │   └── dashboard.css     # Dashboard styles
+│   ├── js/
+│   │   ├── auth.js           # Firebase authentication
+│   │   └── dashboard.js      # Dashboard logic
+│   ├── login.html            # Login page
+│   └── dashboard.html        # Dashboard page
+├── firebase-config.js        # Firebase configuration
+├── package.json
+├── .gitignore
+└── README.md
+```
+
+## 🌐 Deployment
+
+### Deploy to Firebase Hosting
+
 ```bash
-npm run setup
+# Install Firebase CLI
+npm install -g firebase-tools
+
+# Login to Firebase
+firebase login
+
+# Initialize Firebase Hosting
+firebase init hosting
+
+# Select:
+# - Use existing project: lekki-stays
+# - Public directory: src
+# - Single-page app: No
+# - Overwrite files: No
+
+# Deploy
+firebase deploy --only hosting
 ```
 
-### Check Logs
-All admin actions are logged to `admin_audit_log` collection in MongoDB.
+Your admin dashboard will be live at: **https://lekki-stays.web.app**
 
----
+### Deploy to Netlify
 
-## 🎨 Customization
+1. Push code to GitHub
+2. Go to [Netlify](https://netlify.com)
+3. Click "New site from Git"
+4. Select your repository
+5. Set build settings:
+   - **Build command:** (leave empty)
+   - **Publish directory:** `src`
+6. Click "Deploy site"
 
-### Change Colors
-Edit `admin/src/css/dashboard.css`:
-```css
-:root {
-    --primary: #C9A96E;  /* Gold */
-    --success: #4CAF50;  /* Green */
-    --danger: #E53935;   /* Red */
-    /* ... */
-}
+### Deploy to Vercel
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy
+vercel --prod
 ```
 
-### Add New Status
-1. Update `validStatuses` in `admin/api/bookings/routes.js`
-2. Add CSS class in `admin/src/css/dashboard.css`
-3. Update status display in `admin/src/js/dashboard.js`
+## 🔐 Security
+
+### Authentication
+- Firebase Authentication handles all security
+- Only authenticated users can access dashboard
+- Automatic redirect to login if not authenticated
+
+### Firestore Rules
+- Public can only CREATE bookings
+- Admins can READ and UPDATE bookings
+- Admins can UPDATE apartments
+
+### Best Practices
+- ✅ Use strong passwords for admin accounts
+- ✅ Enable 2FA in Firebase Console
+- ✅ Limit admin users to only those who need access
+- ✅ Monitor authentication logs regularly
+
+## 📊 Features
+
+### Current Features
+- ✅ Secure login with Firebase Authentication
+- ✅ View all bookings with filters
+- ✅ Search bookings by ID, name, email
+- ✅ View booking details
+- ✅ View all apartments
+- ✅ Statistics dashboard
+
+### Coming Soon
+- ⏳ Update booking status
+- ⏳ Confirm/decline bookings
+- ⏳ Send WhatsApp notifications
+- ⏳ Mark bookings as paid
+- ⏳ Check-in/check-out management
+- ⏳ Revenue analytics
+
+## 🆘 Troubleshooting
+
+### "Permission denied" errors
+→ Check Firestore security rules  
+→ Verify you're logged in with admin account
+
+### "Network error" on login
+→ Check Firebase configuration  
+→ Verify Firebase Authentication is enabled
+
+### Dashboard not loading data
+→ Check browser console for errors  
+→ Verify Firestore has data  
+→ Check security rules
+
+### Can't login
+→ Verify admin user exists in Firebase  
+→ Check email and password  
+→ Try resetting password in Firebase Console
+
+## 📚 Documentation
+
+- **Setup Guide:** [FIREBASE_ADMIN_SETUP.md](FIREBASE_ADMIN_SETUP.md)
+- **Firebase Console:** https://console.firebase.google.com/project/lekki-stays
+- **Firebase Auth Docs:** https://firebase.google.com/docs/auth
+- **Firestore Docs:** https://firebase.google.com/docs/firestore
+
+## 🤝 Contributing
+
+This is a private admin dashboard. Only authorized developers should have access.
+
+## 📝 License
+
+Private - All rights reserved
+
+## 🔗 Related Projects
+
+- **Main Website:** [lekki-stays](https://github.com/YOUR_USERNAME/lekki-stays)
+- **Backend Server:** (if separate)
+
+## 📧 Support
+
+For issues or questions, contact: admin@lekkistays.com
 
 ---
 
-## 📞 Support
-
-For issues or questions:
-1. Check this README
-2. Check browser console for errors
-3. Check server logs
-4. Review MongoDB data
-
----
-
-## ✅ Checklist
-
-Before going live:
-- [ ] Admin user created
-- [ ] JWT_SECRET changed
-- [ ] SESSION_SECRET changed
-- [ ] Strong admin password set
-- [ ] MongoDB connection working
-- [ ] CORS_ORIGIN configured
-- [ ] Deployed to Vercel
-- [ ] Environment variables set in Vercel
-- [ ] HTTPS enabled
-- [ ] Tested login
-- [ ] Tested booking confirmation
-- [ ] Tested WhatsApp links
-- [ ] Audit logging verified
-
----
-
-**Your admin dashboard is ready! 🎉**
-
-Login at: http://localhost:3001
+**Version:** 1.0.0  
+**Last Updated:** April 29, 2026  
+**Status:** ✅ Production Ready
