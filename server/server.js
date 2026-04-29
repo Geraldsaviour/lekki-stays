@@ -175,9 +175,9 @@ app.use((req, res, next) => {
 });
 
 // Explicit routes for main static files
-// API Routes
-app.use('/api/apartments', require('./routes/apartments'));
-app.use('/api/bookings', require('./routes/bookings'));
+// API Routes - Using Firebase
+app.use('/api/apartments', require('./routes/apartments-firebase'));
+app.use('/api/bookings', require('./routes/bookings-firebase'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/payments', require('./routes/payments'));
 
@@ -284,18 +284,12 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-// Initialize database and start server
-initialize()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`🏨 Lekki Stays server running on port ${PORT}`);
-      console.log(`🌐 Visit: http://localhost:${PORT}`);
-      console.log(`📱 WhatsApp: ${process.env.HOST_WHATSAPP_NUMBER}`);
-    });
-  })
-  .catch(err => {
-    console.error('Failed to initialize database:', err);
-    process.exit(1);
-  });
+// Start server (Firebase doesn't need initialization)
+app.listen(PORT, () => {
+  console.log(`🏨 Lekki Stays server running on port ${PORT}`);
+  console.log(`🌐 Visit: http://localhost:${PORT}`);
+  console.log(`📱 WhatsApp: ${process.env.HOST_WHATSAPP_NUMBER}`);
+  console.log(`🔥 Using Firebase Firestore`);
+});
 
 module.exports = app;
