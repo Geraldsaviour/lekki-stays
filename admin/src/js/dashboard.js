@@ -414,28 +414,20 @@ document.getElementById('declineBookingBtn').addEventListener('click', async () 
     btn.textContent = 'Declining...';
 
     try {
-        const response = await fetch(`/api/bookings/${currentBookingId}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({ 
-                status: 'declined',
-                note: note || 'Declined by admin'
-            })
+        // Update booking status in Firestore
+        const bookingRef = doc(db, 'bookings', currentBookingId);
+        await updateDoc(bookingRef, {
+            status: 'declined',
+            declineNote: note || 'Declined by admin',
+            updatedAt: Timestamp.now()
         });
-
-        if (response.ok) {
-            closeModal('declineModal');
-            await loadDashboard();
-            alert('Booking declined successfully!');
-        } else {
-            alert('Failed to decline booking. Please try again.');
-        }
+        
+        closeModal('declineModal');
+        await loadDashboard();
+        alert('Booking declined successfully!');
     } catch (error) {
         console.error('Decline booking error:', error);
-        alert('Network error. Please try again.');
+        alert('Failed to decline booking: ' + error.message);
     } finally {
         btn.disabled = false;
         btn.textContent = 'Decline Booking';
@@ -445,19 +437,45 @@ document.getElementById('declineBookingBtn').addEventListener('click', async () 
 // Send payment details
 async function sendPaymentDetails(bookingId) {
     try {
-        const response = await fetch(`/api/bookings/${bookingId}/send-payment`, {
-            method: 'POST',
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.whatsappUrl) {
-                window.open(data.whatsappUrl, '_blank');
-            }
+        // Get booking details from Firestore
+        const bookingRef = doc(db, 'bookings', bookingId);
+        const bookingSnap = await getDoc(bookingRef);
+        
+        if (!bookingSnap.exists()) {
+            console.error('Booking not found');
+            return;
         }
+        
+        const booking = bookingSnap.data();
+        
+        // Format WhatsApp message
+        const message = `Hello ${booking.guestName}! 🏨
+
+Your booking at Lekki Stays has been CONFIRMED! ✅
+
+📋 Booking Reference: ${booking.bookingReference || bookingId}
+📅 Check-in: ${booking.checkIn?.toDate().toLocaleDateString()}
+📅 Check-out: ${booking.checkOut?.toDate().toLocaleDateString()}
+💰 Total Amount: ₦${booking.totalPrice?.toLocaleString('en-NG')}
+
+💳 PAYMENT DETAILS:
+Bank: GTBank
+Account Name: Lekki Stays
+Account Number: 0123456789
+
+Please make payment and send proof to this number.
+
+Thank you for choosing Lekki Stays! 🌟`;
+
+        // Create WhatsApp URL
+        const phone = booking.guestPhone.replace(/\D/g, ''); // Remove non-digits
+        const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        
+        // Open WhatsApp
+        window.open(whatsappUrl, '_blank');
     } catch (error) {
         console.error('Send payment error:', error);
+        alert('Failed to open WhatsApp: ' + error.message);
     }
 }
 
@@ -466,27 +484,18 @@ async function markAsPaid(bookingId) {
     if (!confirm('Mark this booking as paid?')) return;
 
     try {
-        const response = await fetch(`/api/bookings/${bookingId}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({ 
-                status: 'paid',
-                note: 'Payment confirmed by admin'
-            })
+        // Update booking status in Firestore
+        const bookingRef = doc(db, 'bookings', bookingId);
+        await updateDoc(bookingRef, {
+            status: 'paid',
+            updatedAt: Timestamp.now()
         });
-
-        if (response.ok) {
-            await loadDashboard();
-            alert('Booking marked as paid!');
-        } else {
-            alert('Failed to update booking. Please try again.');
-        }
+        
+        await loadDashboard();
+        alert('Booking marked as paid!');
     } catch (error) {
         console.error('Mark as paid error:', error);
-        alert('Network error. Please try again.');
+        alert('Failed to update booking: ' + error.message);
     }
 }
 
