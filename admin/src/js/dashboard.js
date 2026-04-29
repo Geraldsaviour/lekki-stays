@@ -510,41 +510,29 @@ async function updateStatus(bookingId, newStatus) {
     if (!confirm(`${statusNames[newStatus]} this booking?`)) return;
 
     try {
-        const response = await fetch(`/api/bookings/${bookingId}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({ 
-                status: newStatus,
-                note: `${statusNames[newStatus]} by admin`
-            })
+        // Update booking status in Firestore
+        const bookingRef = doc(db, 'bookings', bookingId);
+        await updateDoc(bookingRef, {
+            status: newStatus,
+            updatedAt: Timestamp.now()
         });
-
-        if (response.ok) {
-            await loadDashboard();
-            alert(`Booking ${statusNames[newStatus].toLowerCase()}ed successfully!`);
-        } else {
-            alert('Failed to update booking. Please try again.');
-        }
+        
+        await loadDashboard();
+        alert(`Booking ${statusNames[newStatus].toLowerCase()}ed successfully!`);
     } catch (error) {
         console.error('Update status error:', error);
-        alert('Network error. Please try again.');
+        alert('Failed to update booking: ' + error.message);
     }
 }
 
 // Event listeners
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     try {
-        await fetch('/api/auth/logout', {
-            method: 'POST',
-            credentials: 'include'
-        });
-        window.location.href = '/';
+        await signOut(auth);
+        window.location.href = 'login.html';
     } catch (error) {
         console.error('Logout error:', error);
-        window.location.href = '/';
+        alert('Failed to logout: ' + error.message);
     }
 });
 
