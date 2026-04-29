@@ -81,37 +81,69 @@ async function loadBookings() {
     `;
 
     try {
-        const params = new URLSearchParams({
-            status: currentStatus,
-            search: currentSearch,
-            page: currentPage,
-            limit: 20
-        });
-
-        const response = await fetch(`/api/bookings/list?${params}`, {
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            if (data.success) {
-                displayBookings(data.bookings);
-                updatePagination(data.pagination);
-            }
-        } else {
-            bookingsList.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">⚠️</div>
-                    <p>Failed to load bookings</p>
-                </div>
-            `;
+        // Build Firestore query
+        const bookingsRef = collection(db, 'bookings');
+        let q = query(bookingsRef, orderBy('createdAt', 'desc'));
+        
+        // Apply status filter
+        if (currentStatus !== 'all') {
+            q = query(bookingsRef, where('status', '==', currentStatus), orderBy('createdAt', 'desc'));
         }
+        
+        const snapshot = await getDocs(q);
+        
+        // Convert to array
+        allBookings = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            allBookings.push({
+                id: doc.id,
+                guestName: data.guestName || '',
+                guestEmail: data.guestEmail || '',
+                guestPhone: data.guestPhone || '',
+                apartmentId: data.apartmentId || '',
+                checkIn: data.checkIn?.toDate() || new Date(),
+                checkOut: data.checkOut?.toDate() || new Date(),
+                numGuests: data.guests || 0,
+                totalPrice: data.totalPrice || 0,
+                status: data.status || 'pending',
+                createdAt: data.createdAt?.toDate() || new Date(),
+                bookingReference: data.bookingReference || doc.id
+            });
+        });
+        
+        // Apply search filter
+        let filteredBookings = allBookings;
+        if (currentSearch) {
+            const searchLower = currentSearch.toLowerCase();
+            filteredBookings = allBookings.filter(booking => 
+                booking.id.toLowerCase().includes(searchLower) ||
+                booking.bookingReference.toLowerCase().includes(searchLower) ||
+                booking.guestName.toLowerCase().includes(searchLower) ||
+                booking.guestEmail.toLowerCase().includes(searchLower) ||
+                booking.guestPhone.includes(currentSearch)
+            );
+        }
+        
+        // Pagination
+        const pageSize = 20;
+        const totalPages = Math.ceil(filteredBookings.length / pageSize);
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedBookings = filteredBookings.slice(startIndex, endIndex);
+        
+        displayBookings(paginatedBookings);
+        updatePagination({
+            page: currentPage,
+            pages: totalPages,
+            total: filteredBookings.length
+        });
     } catch (error) {
         console.error('Load bookings error:', error);
         bookingsList.innerHTML = `
             <div class="empty-state">
                 <div class="empty-state-icon">⚠️</div>
-                <p>Network error. Please try again.</p>
+                <p>Failed to load bookings: ${error.message}</p>
             </div>
         `;
     }
@@ -277,44 +309,62 @@ function closeModal(modalId) {
 // Load booking summary
 async function loadBookingSummary(bookingId, elementId) {
     try {
-        const response = await fetch(`/api/bookings/${bookingId}`, {
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            if (data.success) {
-                const booking = data.booking;
-                const apartment = data.apartment;
-                
-                const summary = `
-                    <div class="summary-row">
-                        <span class="summary-label">Booking ID:</span>
-                        <span class="summary-value">#${booking.id}</span>
-                    </div>
-                    <div class="summary-row">
-                        <span class="summary-label">Guest:</span>
-                        <span class="summary-value">${booking.guestName}</span>
-                    </div>
-                    <div class="summary-row">
-                        <span class="summary-label">Apartment:</span>
-                        <span class="summary-value">${apartment ? apartment.name : 'Property ' + booking.apartmentId}</span>
-                    </div>
-                    <div class="summary-row">
-                        <span class="summary-label">Dates:</span>
-                        <span class="summary-value">${new Date(booking.checkIn).toLocaleDateString()} - ${new Date(booking.checkOut).toLocaleDateString()}</span>
-                    </div>
-                    <div class="summary-row">
-                        <span class="summary-label">Total:</span>
-                        <span class="summary-value">₦${booking.totalPrice.toLocaleString('en-NG')}</span>
-                    </div>
-                `;
-                
-                document.getElementById(elementId).innerHTML = summary;
-            }
+        // Get booking from Firestore
+        const bookingRef = doc(db, 'bookings', bookingId);
+        const bookingSnap = await getDoc(bookingRef);
+        
+        if (!bookingSnap.exists()) {
+            document.getElementById(elementId).innerHTML = '<p>Booking not found</p>';
+            return;
         }
+        
+        const bookingData = bookingSnap.data();
+        const booking = {
+            id: bookingSnap.id,
+            ...bookingData,
+            checkIn: bookingData.checkIn?.toDate(),
+            checkOut: bookingData.checkOut?.toDate()
+        };
+        
+        // Get apartment details
+        let apartmentName = `Property ${booking.apartmentId}`;
+        try {
+            const apartmentRef = doc(db, 'apartments', booking.apartmentId);
+            const apartmentSnap = await getDoc(apartmentRef);
+            if (apartmentSnap.exists()) {
+                apartmentName = apartmentSnap.data().name || apartmentName;
+            }
+        } catch (error) {
+            console.error('Error loading apartment:', error);
+        }
+        
+        const summary = `
+            <div class="summary-row">
+                <span class="summary-label">Booking ID:</span>
+                <span class="summary-value">#${booking.bookingReference || booking.id}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Guest:</span>
+                <span class="summary-value">${booking.guestName}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Apartment:</span>
+                <span class="summary-value">${apartmentName}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Dates:</span>
+                <span class="summary-value">${booking.checkIn.toLocaleDateString()} - ${booking.checkOut.toLocaleDateString()}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Total:</span>
+                <span class="summary-value">₦${booking.totalPrice.toLocaleString('en-NG')}</span>
+            </div>
+        `;
+        
+        document.getElementById(elementId).innerHTML = summary;
     } catch (error) {
         console.error('Load booking summary error:', error);
+        document.getElementById(elementId).innerHTML = '<p>Error loading booking details</p>';
     }
 }
 
@@ -329,33 +379,24 @@ document.getElementById('confirmBookingBtn').addEventListener('click', async () 
     btn.textContent = 'Confirming...';
 
     try {
-        const response = await fetch(`/api/bookings/${currentBookingId}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({ 
-                status: 'confirmed',
-                note: 'Confirmed by admin'
-            })
+        // Update booking status in Firestore
+        const bookingRef = doc(db, 'bookings', currentBookingId);
+        await updateDoc(bookingRef, {
+            status: 'confirmed',
+            updatedAt: Timestamp.now()
         });
-
-        if (response.ok) {
-            // If send payment is checked, open WhatsApp
-            if (sendPayment) {
-                await sendPaymentDetails(currentBookingId);
-            }
-            
-            closeModal('confirmModal');
-            await loadDashboard();
-            alert('Booking confirmed successfully!');
-        } else {
-            alert('Failed to confirm booking. Please try again.');
+        
+        // If send payment is checked, open WhatsApp
+        if (sendPayment) {
+            await sendPaymentDetails(currentBookingId);
         }
+        
+        closeModal('confirmModal');
+        await loadDashboard();
+        alert('Booking confirmed successfully!');
     } catch (error) {
         console.error('Confirm booking error:', error);
-        alert('Network error. Please try again.');
+        alert('Failed to confirm booking: ' + error.message);
     } finally {
         btn.disabled = false;
         btn.textContent = 'Confirm & Send Payment';
