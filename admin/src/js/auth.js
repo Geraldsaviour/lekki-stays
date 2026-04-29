@@ -1,20 +1,19 @@
+// Firebase Authentication
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import { firebaseConfig } from '../firebase-config.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 // Check if already logged in
-checkAuth();
-
-async function checkAuth() {
-    try {
-        const response = await fetch('/api/auth/me', {
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            // Already logged in, redirect to dashboard
-            window.location.href = '/dashboard';
-        }
-    } catch (error) {
-        // Not logged in, stay on login page
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // Already logged in, redirect to dashboard
+        window.location.href = 'dashboard.html';
     }
-}
+});
 
 // Login form handler
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -49,39 +48,31 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     btnLoader.style.display = 'flex';
 
     try {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-            // Success
-            formMessage.textContent = 'Login successful! Redirecting...';
-            formMessage.classList.add('show', 'success');
-            
-            // Redirect to dashboard
-            setTimeout(() => {
-                window.location.href = '/dashboard';
-            }, 1000);
-        } else {
-            // Error
-            formMessage.textContent = data.error || 'Login failed. Please try again.';
-            formMessage.classList.add('show', 'error');
-            
-            // Reset button
-            loginBtn.disabled = false;
-            btnText.style.display = 'block';
-            btnLoader.style.display = 'none';
-        }
+        await signInWithEmailAndPassword(auth, email, password);
+        
+        // Success
+        formMessage.textContent = 'Login successful! Redirecting...';
+        formMessage.classList.add('show', 'success');
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1000);
     } catch (error) {
         console.error('Login error:', error);
-        formMessage.textContent = 'Network error. Please check your connection.';
+        
+        let message = 'Login failed. Please try again.';
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+            message = 'Invalid email or password.';
+        } else if (error.code === 'auth/user-not-found') {
+            message = 'No account found with this email.';
+        } else if (error.code === 'auth/too-many-requests') {
+            message = 'Too many failed attempts. Please try again later.';
+        } else if (error.code === 'auth/network-request-failed') {
+            message = 'Network error. Please check your connection.';
+        }
+        
+        formMessage.textContent = message;
         formMessage.classList.add('show', 'error');
         
         // Reset button
