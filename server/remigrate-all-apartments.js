@@ -1,24 +1,39 @@
-// Migrate Apartments Data from JSON to Firebase Firestore
+// Clear and Re-migrate All Apartments to Firestore
 require('dotenv').config();
 const { db, admin } = require('./firebase-admin');
 const fs = require('fs');
 const path = require('path');
 
-async function migrateApartments() {
+async function remigrate() {
   try {
-    console.log('🚀 Starting apartment migration to Firestore...\n');
+    console.log('🔄 Starting re-migration of all apartments...\n');
     
-    // Read apartments from JSON file
+    // Step 1: Delete existing apartments
+    console.log('🗑️  Deleting existing apartments from Firestore...');
+    const existingSnapshot = await db.collection('apartments').get();
+    
+    if (!existingSnapshot.empty) {
+      const batch = db.batch();
+      existingSnapshot.docs.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+      console.log(`   ✅ Deleted ${existingSnapshot.size} existing apartments\n`);
+    } else {
+      console.log('   ℹ️  No existing apartments to delete\n');
+    }
+    
+    // Step 2: Read all apartments from JSON
     const apartmentsPath = path.join(__dirname, '..', 'data', 'apartments-full.json');
     const apartmentsData = JSON.parse(fs.readFileSync(apartmentsPath, 'utf8'));
     
     console.log(`📦 Found ${apartmentsData.length} apartments to migrate\n`);
     
+    // Step 3: Migrate all apartments
     const batch = db.batch();
     let count = 0;
     
     for (const apartment of apartmentsData) {
-      // Create Firestore document
       const docRef = db.collection('apartments').doc();
       
       const firestoreApartment = {
@@ -28,9 +43,9 @@ async function migrateApartments() {
         maxGuests: apartment.maxGuests,
         bedrooms: apartment.bedrooms,
         bathrooms: apartment.bathrooms,
-        price: apartment.pricePerNight, // Rename to 'price' for consistency
+        price: apartment.pricePerNight,
         amenities: apartment.amenities,
-        images: apartment.photos, // Rename to 'images' for consistency
+        images: apartment.photos,
         location: apartment.location,
         available: apartment.isActive,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -40,7 +55,7 @@ async function migrateApartments() {
       batch.set(docRef, firestoreApartment);
       count++;
       
-      console.log(`✅ Prepared: ${apartment.name}`);
+      console.log(`✅ Prepared: ${apartment.name} (₦${apartment.pricePerNight.toLocaleString()}/night)`);
     }
     
     // Commit the batch
@@ -53,27 +68,24 @@ async function migrateApartments() {
     const snapshot = await db.collection('apartments').get();
     console.log(`✅ Firestore now contains ${snapshot.size} apartments\n`);
     
-    // Display sample data
-    console.log('📋 Sample apartment data:');
-    const firstDoc = snapshot.docs[0];
-    if (firstDoc) {
-      console.log(JSON.stringify({
-        id: firstDoc.id,
-        ...firstDoc.data()
-      }, null, 2));
-    }
+    // Display all apartments
+    console.log('📋 All apartments in Firestore:');
+    snapshot.docs.forEach((doc, index) => {
+      const data = doc.data();
+      console.log(`   ${index + 1}. ${data.name} - ₦${data.price.toLocaleString()}/night`);
+    });
     
-    console.log('\n✨ Migration complete! Your apartments are now in Firestore.');
+    console.log('\n✨ Re-migration complete!');
     console.log('🔗 View in Firebase Console: https://console.firebase.google.com/project/lekki-stays/firestore');
     
   } catch (error) {
-    console.error('❌ Migration failed:', error);
+    console.error('❌ Re-migration failed:', error);
     process.exit(1);
   }
 }
 
-// Run migration
-migrateApartments()
+// Run re-migration
+remigrate()
   .then(() => process.exit(0))
   .catch(error => {
     console.error('Fatal error:', error);

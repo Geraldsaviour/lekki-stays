@@ -1,0 +1,211 @@
+[
+  {
+    "id": 1,
+    "name": "Lekki Stays — Studio",
+    "type": "cozy homes",
+    "description": "A serene studio in central Lekki Phase 1. Modern interior, fully equipped kitchenette, plush king-sized bed. Large windows fill the space with natural light. Pool access included.",
+    "maxGuests": 2,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "pricePerNight": 45000,
+    "amenities": [
+      "Swimming pool",
+      "Kitchen",
+      "Air conditioning",
+      "WiFi"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80"
+    ],
+    "location": "15 Admiralty Way, Lekki Phase 1, Lagos",
+    "isActive": true
+  },
+  {
+    "id": 2,
+    "name": "Lekki Stays — Deluxe Studio",
+    "type": "luxury suites",
+    "description": "An elevated studio experience with premium finishes, smart TV, and panoramic city views. Steps from the best of Lekki.",
+    "maxGuests": 2,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "pricePerNight": 55000,
+    "amenities": [
+      "Swimming pool",
+      "Air conditioning",
+      "Washer",
+      "WiFi",
+      "Smart TV"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
+    "location": "Plot 1415, Adetokunbo Ademola Street, Lekki Phase 1, Lagos",
+    "isActive": true
+  },
+  {
+    "id": 3,
+    "name": "Lekki Stays — 1 Bedroom",
+    "type": "premium stays",
+    "description": "Spacious 1-bedroom apartment with a fully equipped kitchen, living room, and dedicated workspace. Ideal for business travelers and couples.",
+    "maxGuests": 3,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "pricePerNight": 65000,
+    "amenities": [
+      "Swimming pool",
+      "Kitchen",
+      "Air conditioning",
+      "WiFi",
+      "Washer"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80",
+      "https://images.unsplash.com/photo-1540518614846-7eded433c457?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
+    "location": "1161 Memorial Drive, Lekki Phase 1, Lagos",
+    "isActive": true
+  },
+  {
+    "id": 4,
+    "name": "Lekki Stays — Luxury 1 Bedroom",
+    "type": "executive homes",
+    "description": "A luxury retreat with designer interiors, walk-in closet, soaking tub, and private balcony. For guests who want nothing but the best.",
+    "maxGuests": 3,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "pricePerNight": 85000,
+    "amenities": [
+      "Swimming pool",
+      "Kitchen",
+      "Air conditioning",
+      "WiFi",
+      "Washer",
+      "Balcony",
+      "Bathtub"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
+    "location": "23 Kingsway Road, Lekki Phase 2, Lagos",
+    "isActive": true
+  },
+  {
+    "id": 5,
+    "name": "Lekki Stays — Aparthotel Suite",
+    "type": "luxury suites",
+    "description": "A full 2-bedroom aparthotel suite with hotel-grade furnishings, two bathrooms, and a full kitchen. Perfect for families or groups of up to 5.",
+    "maxGuests": 5,
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "pricePerNight": 110000,
+    "amenities": [
+      "Swimming pool",
+      "Kitchen",
+      "Air conditioning",
+      "WiFi",
+      "Washer",
+      "Smart TV",
+      "Parking"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80"
+    ],
+    "location": "Plot 1415, Adetokunbo Ademola Street, Lekki Phase 1, Lagos",
+    "isActive": true
+  },
+  {
+    "id": 6,
+    "name": "Lekki Stays — Penthouse",
+    "type": "premium stays",
+    "description": "The crown jewel of Lekki Stays. A full penthouse with floor-to-ceiling windows, rooftop access, premium kitchen, and panoramic Lagos views.",
+    "maxGuests": 6,
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "pricePerNight": 150000,
+    "amenities": [
+      "Swimming pool",
+      "Kitchen",
+      "Air conditioning",
+      "WiFi",
+      "Washer",
+      "Balcony",
+      "Rooftop terrace",
+      "Smart TV",
+      "Gym"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1617104678098-de229db51175?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
+    "location": "1161 Memorial Drive, Victoria Island, Lagos",
+    "isActive": true
+  },
+  {
+    "id": 7,
+    "name": "Victoria Island Executive Suite",
+    "type": "executive homes",
+    "description": "Luxurious two-bedroom suite in the prestigious Victoria Island. Features modern amenities and stunning city views, perfect for families and business groups.",
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "pricePerNight": 95000,
+    "amenities": [
+      "Swimming pool",
+      "Gym",
+      "Kitchen",
+      "WiFi",
+      "Smart TV",
+      "Balcony",
+      "Concierge",
+      "Parking",
+      "Security"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2058&q=80",
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
+    "location": "Plot 1415, Adetokunbo Ademola Street, Victoria Island, Lagos",
+    "isActive": true
+  },
+  {
+    "id": 8,
+    "name": "Ikoyi Luxury Residence",
+    "type": "premium stays",
+    "description": "Stunning three-bedroom penthouse with panoramic views of Lagos lagoon. Features premium finishes, spacious living areas, and exclusive access to rooftop terrace.",
+    "maxGuests": 6,
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "pricePerNight": 120000,
+    "amenities": [
+      "Swimming pool",
+      "Kitchen",
+      "Air conditioning",
+      "Balcony",
+      "Rooftop terrace",
+      "WiFi",
+      "Smart TV",
+      "Gym",
+      "Concierge",
+      "Security",
+      "Parking"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1574180045827-681f8a1a9622?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80",
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
+    "location": "23 Kingsway Road, Ikoyi, Lagos",
+    "isActive": true
+  }
+]
