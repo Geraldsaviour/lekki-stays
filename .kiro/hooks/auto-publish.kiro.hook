@@ -19,7 +19,7 @@
   },
   "then": {
     "type": "runCommand",
-    "command": "powershell -ExecutionPolicy Bypass -File .kiro/scripts/publish.ps1",
+    "command": "powershell -WindowStyle Hidden -ExecutionPolicy Bypass -File .kiro/scripts/publish.ps1",
     "timeout": 120
   }
 }
