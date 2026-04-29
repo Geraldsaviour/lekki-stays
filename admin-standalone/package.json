@@ -1,0 +1,21 @@
+{
+  "name": "lekki-stays-admin",
+  "version": "1.0.0",
+  "description": "Standalone admin dashboard for Lekki Stays - connects directly to Firebase",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server . -p 3001 -o",
+    "start": "npx http-server . -p 3001"
+  },
+  "keywords": [
+    "admin",
+    "dashboard",
+    "firebase",
+    "lekki-stays"
+  ],
+  "author": "Lekki Stays",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
