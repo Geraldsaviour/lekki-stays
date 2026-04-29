@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lekki Stays Admin - Login</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="logo">
+        <h1>🏨 Lekki Stays</h1>
+        <p>Admin Dashboard</p>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required 
+            placeholder="admin@lekkistays.com"
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required 
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          >
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+        <button type="submit" class="btn-primary" id="loginBtn">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-loader" style="display: none;">Signing in...</span>
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <p>Secure admin access only</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+    import firebaseConfig from './firebase-config.js';
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Login form handler
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const loginBtn = document.getElementById('loginBtn');
+    const btnText = loginBtn.querySelector('.btn-text');
+    const btnLoader = loginBtn.querySelector('.btn-loader');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Show loading state
+      btnText.style.display = 'none';
+      btnLoader.style.display = 'inline';
+      loginBtn.disabled = true;
+      errorMessage.style.display = 'none';
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html';
+      } catch (error) {
+        console.error('Login error:', error);
+        
+        let message = 'Login failed. Please try again.';
+        if (error.code === 'auth/invalid-credential') {
+          message = 'Invalid email or password.';
+        } else if (error.code === 'auth/user-not-found') {
+          message = 'No account found with this email.';
+        } else if (error.code === 'auth/wrong-password') {
+          message = 'Incorrect password.';
+        } else if (error.code === 'auth/too-many-requests') {
+          message = 'Too many failed attempts. Please try again later.';
+        }
+
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+      } finally {
+        // Reset button state
+        btnText.style.display = 'inline';
+        btnLoader.style.display = 'none';
+        loginBtn.disabled = false;
+      }
+    });
+
+    // Check if already logged in
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>
