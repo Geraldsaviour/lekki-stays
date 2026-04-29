@@ -740,8 +740,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookNowBtn = document.getElementById('bookNowBtn');
     if (bookNowBtn) {
         bookNowBtn.addEventListener('click', () => {
-            // Navigate to index.html apartments section
-            window.location.href = 'index.html#apartments';
+            // Navigate to index.html apartments section (use relative path for subdirectories)
+            window.location.href = '../index.html#apartments';
         });
     }
 });
