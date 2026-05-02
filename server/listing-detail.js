@@ -229,7 +229,7 @@ function initializeBookingPanel() {
         // Build booking URL with parameters
         const checkinParam = selectedCheckin.toISOString().split('T')[0];
         const checkoutParam = selectedCheckout.toISOString().split('T')[0];
-        const bookingUrl = `booking.html?id=${currentListing.id}&checkin=${checkinParam}&checkout=${checkoutParam}&guests=${guestCount}`;
+        const bookingUrl = `../booking/booking.html?id=${currentListing.id}&checkin=${checkinParam}&checkout=${checkoutParam}&guests=${guestCount}`;
         
         // Navigate to booking page
         window.location.href = bookingUrl;

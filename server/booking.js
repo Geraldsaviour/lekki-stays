@@ -156,7 +156,7 @@ function showDateConflictPopup(booking) {
 }
 
 function goBackToListing() {
-    window.location.href = `listing-${bookingData.id}.html`;
+    window.location.href = `../listings/listing-${bookingData.id}.html`;
 }
 
 function contactViaWhatsApp() {

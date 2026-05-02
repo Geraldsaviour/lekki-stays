@@ -266,7 +266,7 @@ class SearchResults {
                         <span class="price-amount">₦${apartment.pricePerNight.toLocaleString()}</span>
                         <span class="price-period">per night</span>
                     </div>
-                    <button class="view-details-btn" onclick="window.location.href='listing-${apartment.id}.html'">
+                    <button class="view-details-btn" onclick="window.location.href='../listings/listing-${apartment.id}.html'">
                         View Details
                     </button>
                 </div>
@@ -288,7 +288,7 @@ class SearchResults {
                 ease: 'power2.inOut',
                 onComplete: () => {
                     // Redirect to homepage search section
-                    window.location.href = 'index.html#apartments';
+                    window.location.href = '../index.html#apartments';
                 }
             });
         });

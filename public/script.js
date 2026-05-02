@@ -1817,7 +1817,7 @@ class PropertyListings {
                         <span class="price-amount">${this.formatPrice(price)}</span>
                         <span class="price-period">per night</span>
                     </div>
-                    <a href="listing-${listing.id}.html${this.getBookingParams()}" class="view-details-btn">View Details</a>
+                    <a href="listings/listing-${listing.id}.html${this.getBookingParams()}" class="view-details-btn">View Details</a>
                 </div>
             </div>
         `;
