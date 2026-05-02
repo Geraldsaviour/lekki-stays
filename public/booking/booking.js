@@ -201,7 +201,7 @@ function populateBookingData() {
     document.getElementById('totalAmount').textContent = `₦${grandTotal.toLocaleString('en-NG')}`;
     
     // Set edit dates link
-    document.getElementById('editDatesLink').href = `listing-${bookingData.id}.html`;
+    document.getElementById('editDatesLink').href = `../listings/listing-${bookingData.id}.html`;
     
     // Populate house rules if available
     if (currentListing.rules && currentListing.rules.length > 0) {

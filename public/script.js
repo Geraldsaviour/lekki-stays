@@ -1409,7 +1409,7 @@ class BookingCalendar {
                                 guests: totalGuests
                             });
                             
-                            window.location.href = `search-results.html?${params.toString()}`;
+                            window.location.href = `search/search-results.html?${params.toString()}`;
                             return; // Exit early since we're redirecting
                         }
                     } else {
