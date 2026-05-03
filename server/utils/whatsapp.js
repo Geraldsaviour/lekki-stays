@@ -54,12 +54,12 @@ Guests: ${booking.numGuests}
 Total: ${this.formatNaira(booking.totalPrice)}
 Booking ID: #${booking.id}
 
-✅ CONFIRM: ${process.env.BASE_URL}/api/bookings/${booking.id}/confirm?token=${booking.token}&admin=${process.env.ADMIN_KEY}
+📋 Next Steps:
+1. Review booking details above
+2. Confirm or decline via admin dashboard
+3. Send payment details to guest after confirming
 
-❌ DECLINE: ${process.env.BASE_URL}/api/bookings/${booking.id}/decline?token=${booking.token}&admin=${process.env.ADMIN_KEY}
-
-⚠️ If guest does not pay within 24hrs after confirming, cancel here:
-${process.env.BASE_URL}/api/bookings/${booking.id}/cancel?token=${booking.token}&admin=${process.env.ADMIN_KEY}`;
+Admin Dashboard: ${process.env.BASE_URL}/admin`;
 
     return this.generateWhatsAppURL(process.env.HOST_WHATSAPP_NUMBER, message);
   }
