@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeBookingPage();
 });
 
-function initializeBookingPage() {
+async function initializeBookingPage() {
     // Parse URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     
@@ -32,26 +32,36 @@ function initializeBookingPage() {
         return;
     }
     
-    // Find listing data
-    currentListing = havenListings.find(listing => listing.id === parseInt(bookingData.id));
-    
-    if (!currentListing) {
+    try {
+        // Fetch apartment data from API
+        const response = await window.lekkirStaysAPI.getApartment(bookingData.id);
+        
+        if (!response.success || !response.apartment) {
+            console.error('Failed to load apartment data:', response);
+            showErrorState();
+            return;
+        }
+        
+        // Set current listing from API data
+        currentListing = response.apartment;
+        
+        // Parse dates
+        bookingData.checkin = new Date(bookingData.checkin);
+        bookingData.checkout = new Date(bookingData.checkout);
+        bookingData.guests = parseInt(bookingData.guests);
+        
+        // Show booking content and populate data
+        document.getElementById('bookingContent').style.display = 'block';
+        populateBookingData();
+        initializeInteractions();
+        
+        // Check availability for these dates
+        checkDateAvailability();
+        
+    } catch (error) {
+        console.error('Error loading booking page:', error);
         showErrorState();
-        return;
     }
-    
-    // Parse dates
-    bookingData.checkin = new Date(bookingData.checkin);
-    bookingData.checkout = new Date(bookingData.checkout);
-    bookingData.guests = parseInt(bookingData.guests);
-    
-    // Show booking content and populate data
-    document.getElementById('bookingContent').style.display = 'block';
-    populateBookingData();
-    initializeInteractions();
-    
-    // Check availability for these dates
-    checkDateAvailability();
 }
 
 function showErrorState() {
@@ -180,10 +190,11 @@ function populateBookingData() {
     document.getElementById('apartmentBreadcrumb').textContent = currentListing.name;
     
     // Populate listing preview
-    document.getElementById('listingThumbnail').src = currentListing.images[0];
+    const images = currentListing.images || ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'];
+    document.getElementById('listingThumbnail').src = images[0];
     document.getElementById('listingThumbnail').alt = currentListing.name;
     document.getElementById('listingName').textContent = currentListing.name;
-    document.getElementById('categoryBadge').textContent = currentListing.category;
+    document.getElementById('categoryBadge').textContent = currentListing.category || 'Luxury';
     
     // Calculate nights and totals
     const nights = Math.ceil((bookingData.checkout - bookingData.checkin) / (1000 * 60 * 60 * 24));
