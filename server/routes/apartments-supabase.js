@@ -215,6 +215,7 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     
+    // Get apartment details
     const { data: apartment, error } = await supabase
       .from('apartments')
       .select('*')
@@ -231,9 +232,36 @@ router.get('/:id', async (req, res) => {
       throw error;
     }
     
+    // Get reviews for this apartment
+    const { data: reviews, error: reviewsError } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('apartment_id', id)
+      .order('created_at', { ascending: false });
+    
+    if (reviewsError) {
+      console.error('Error fetching reviews:', reviewsError);
+      // Continue without reviews rather than failing
+    }
+    
+    // Calculate average rating
+    let averageRating = 0;
+    if (reviews && reviews.length > 0) {
+      const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+      averageRating = (totalRating / reviews.length).toFixed(1);
+    }
+    
+    // Transform apartment data and add reviews
+    const apartmentWithReviews = {
+      ...transformApartment(apartment),
+      reviews: reviews || [],
+      averageRating: parseFloat(averageRating),
+      reviewCount: reviews ? reviews.length : 0
+    };
+    
     res.json({
       success: true,
-      apartment: transformApartment(apartment)
+      apartment: apartmentWithReviews
     });
     
   } catch (error) {
