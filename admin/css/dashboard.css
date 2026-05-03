@@ -5,6 +5,15 @@
     overflow: hidden;
 }
 
+/* Smooth scrolling for mobile */
+.content-section {
+    -webkit-overflow-scrolling: touch;
+}
+
+.sidebar-nav {
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Sidebar */
 .sidebar {
     width: 260px;
