@@ -12,10 +12,22 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body class="dashboard-page">
-    <aside class="sidebar">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+        <i data-lucide="menu"></i>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>🏨 LuxStay</h2>
             <p class="sidebar-subtitle">Admin Dashboard</p>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+                <i data-lucide="x"></i>
+            </button>
         </div>
 
         <nav class="sidebar-nav">
