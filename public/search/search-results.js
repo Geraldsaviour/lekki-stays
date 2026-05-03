@@ -250,7 +250,7 @@ class SearchResults {
         card.className = 'result-card';
         
         // Get first image or use placeholder
-        const imageUrl = apartment.photos?.[0] || apartment.images?.[0] || 'https://via.placeholder.com/400x300';
+        const imageUrl = apartment.images?.[0] || apartment.photos?.[0] || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800';
         
         card.innerHTML = `
             <img src="${imageUrl}" alt="${apartment.name}" class="result-image">

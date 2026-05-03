@@ -1738,9 +1738,10 @@ class PropertyListings {
                 
                 // Initialize carousel state with unique ID for each copy
                 const uniqueId = `${listing.id}_${copy}`;
+                const images = listing.images || ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'];
                 this.carouselStates[uniqueId] = {
                     currentIndex: 0,
-                    totalImages: listing.images.length
+                    totalImages: images.length
                 };
             });
         }
@@ -1768,14 +1769,15 @@ class PropertyListings {
         const guests = listing.maxGuests || listing.guests || 1;
         const price = listing.pricePerNight || listing.price || 0;
         const amenities = listing.amenities || [];
+        const images = listing.images || ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'];
         
         // Limit amenities to max 3
         const displayAmenities = amenities.slice(0, 3);
         
         card.innerHTML = `
             <div class="property-image-container">
-                <img class="property-image" src="${listing.images[0]}" alt="${listing.name}" loading="lazy">
-                <div class="category-badge">${listing.category}</div>
+                <img class="property-image" src="${images[0]}" alt="${listing.name}" loading="lazy">
+                <div class="category-badge">${listing.category || 'Luxury'}</div>
                 
                 <div class="carousel-controls">
                     <button class="carousel-arrow carousel-prev" data-property-id="${uniqueId}">
@@ -1787,7 +1789,7 @@ class PropertyListings {
                 </div>
                 
                 <div class="carousel-dots">
-                    ${listing.images.map((_, index) => 
+                    ${images.map((_, index) => 
                         `<div class="carousel-dot ${index === 0 ? 'active' : ''}" data-property-id="${uniqueId}" data-index="${index}"></div>`
                     ).join('')}
                 </div>
@@ -1800,9 +1802,9 @@ class PropertyListings {
                     <div class="property-specs">
                         <span>${guests} guest${guests > 1 ? 's' : ''}</span>
                         <div class="spec-divider"></div>
-                        <span>${listing.bedrooms} bedroom${listing.bedrooms > 1 ? 's' : ''}</span>
+                        <span>${listing.bedrooms || 1} bedroom${(listing.bedrooms || 1) > 1 ? 's' : ''}</span>
                         <div class="spec-divider"></div>
-                        <span>${listing.bathrooms} bathroom${listing.bathrooms > 1 ? 's' : ''}</span>
+                        <span>${listing.bathrooms || 1} bathroom${(listing.bathrooms || 1) > 1 ? 's' : ''}</span>
                     </div>
                     
                     <div class="property-amenities">
