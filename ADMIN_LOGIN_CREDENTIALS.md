@@ -61,7 +61,7 @@ Visit: https://supabase.com/dashboard/project/kqlxdjkwklcvxfexevsi/auth/users
 ```
 Admin Login Credentials
 ========================
-Email: admin@luxstay.ng
+Email: geraldsaviour2@gmail.com
 Password: [YOUR_PASSWORD_HERE]
 Dashboard URL: http://localhost:3001 (local) or your deployed URL
 ```
@@ -96,7 +96,7 @@ Visit: **http://localhost:3001**
 
 ### Login
 
-- Email: `admin@luxstay.ng`
+- Email: `geraldsaviour2@gmail.com`
 - Password: (your password from Step 2)
 
 ---
@@ -139,7 +139,7 @@ After logging in successfully, you should see:
 
 **Solution:**
 - Go back to Supabase Dashboard → Authentication → Users
-- Verify user exists with email `admin@luxstay.ng`
+- Verify user exists with email `geraldsaviour2@gmail.com`
 - Check "Email Confirmed" column shows ✅
 - If not confirmed, click user → "Confirm email"
 

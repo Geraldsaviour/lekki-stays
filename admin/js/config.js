@@ -4,7 +4,7 @@ export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 
 // Admin credentials (for initial setup)
 // In production, create admin user in Supabase Auth
-export const ADMIN_EMAIL = 'admin@luxstay.ng';
+export const ADMIN_EMAIL = 'geraldsaviour2@gmail.com';
 
 // WhatsApp Configuration
 export const WHATSAPP_NUMBER = '+2349039269846';

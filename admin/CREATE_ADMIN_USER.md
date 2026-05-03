@@ -13,7 +13,7 @@ Click this link:
 2. Select **"Create new user"**
 3. Fill in:
    ```
-   Email: admin@luxstay.ng
+   Email: geraldsaviour2@gmail.com
    Password: [CREATE STRONG PASSWORD]
    ```
 4. ✅ **CHECK** "Auto Confirm User"
@@ -28,7 +28,7 @@ Click this link:
   ADMIN LOGIN CREDENTIALS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Email:    admin@luxstay.ng
+Email:    geraldsaviour2@gmail.com
 Password: [YOUR PASSWORD HERE]
 
 Local:    http://localhost:3001
@@ -51,7 +51,7 @@ python -m http.server 3001
 ### Login
 
 1. Visit: http://localhost:3001
-2. Enter email: `admin@luxstay.ng`
+2. Enter email: `geraldsaviour2@gmail.com`
 3. Enter your password
 4. Click "Sign In"
 
@@ -70,14 +70,14 @@ python -m http.server 3001
 ### Login Fails?
 
 **Check:**
-1. Email is exactly: `admin@luxstay.ng`
+1. Email is exactly: `geraldsaviour2@gmail.com`
 2. Password is correct
 3. "Auto Confirm User" was checked
 4. User exists in Supabase Dashboard
 
 **Fix:**
 - Go to Supabase → Authentication → Users
-- Find `admin@luxstay.ng`
+- Find `geraldsaviour2@gmail.com`
 - Check "Email Confirmed" column
 - If not confirmed, click user → "Confirm email"
 
