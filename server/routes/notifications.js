@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const WhatsAppNotifier = require('../utils/whatsapp');
-const Booking = require('../models/Booking');
-const Apartment = require('../models/Apartment');
+const Booking = require('../models-supabase/Booking');
+const Apartment = require('../models-supabase/Apartment');
 
 /**
  * POST /api/notifications/booking-created
