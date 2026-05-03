@@ -1771,9 +1771,6 @@ class PropertyListings {
         const amenities = listing.amenities || [];
         const images = listing.images || ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'];
         
-        // Convert apartment ID to listing number (apt-1 -> 1, apt-2 -> 2, etc.)
-        const listingNumber = listing.id.replace('apt-', '');
-        
         // Limit amenities to max 3
         const displayAmenities = amenities.slice(0, 3);
         
@@ -1822,7 +1819,7 @@ class PropertyListings {
                         <span class="price-amount">${this.formatPrice(price)}</span>
                         <span class="price-period">per night</span>
                     </div>
-                    <a href="listings/listing-${listingNumber}.html${this.getBookingParams()}" class="view-details-btn">View Details</a>
+                    <a href="listings/listing-${listing.id}.html${this.getBookingParams()}" class="view-details-btn">View Details</a>
                 </div>
             </div>
         `;

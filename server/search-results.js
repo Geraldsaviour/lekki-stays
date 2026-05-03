@@ -252,9 +252,6 @@ class SearchResults {
         // Get first image or use placeholder
         const imageUrl = apartment.images?.[0] || apartment.photos?.[0] || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800';
         
-        // Convert apartment ID to listing number (apt-1 -> 1, apt-2 -> 2, etc.)
-        const listingNumber = apartment.id.replace('apt-', '');
-        
         card.innerHTML = `
             <img src="${imageUrl}" alt="${apartment.name}" class="result-image">
             <div class="result-content">
@@ -283,7 +280,7 @@ class SearchResults {
                         <span class="price-amount">₦${apartment.pricePerNight.toLocaleString()}</span>
                         <span class="price-period">per night</span>
                     </div>
-                    <button class="view-details-btn" onclick="window.location.href='../listings/listing-${listingNumber}.html'">
+                    <button class="view-details-btn" onclick="window.location.href='../listings/listing-${apartment.id}.html'">
                         View Details
                     </button>
                 </div>
