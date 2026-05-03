@@ -175,7 +175,15 @@ function initializeEventListeners() {
 
     // Modal close
     document.getElementById('closeModal').addEventListener('click', closeModal);
-    document.querySelector('.modal-overlay').addEventListener('click', closeModal);
+    document.querySelector('.modal-overlay').addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) {
+            closeModal();
+        }
+    });
+
+    // Reason modal close
+    document.getElementById('closeReasonModal').addEventListener('click', closeReasonModal);
+    document.getElementById('cancelReasonBtn').addEventListener('click', closeReasonModal);
 }
 
 // Load dashboard data
