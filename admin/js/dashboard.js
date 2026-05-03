@@ -386,12 +386,15 @@ async function handleBookingAction(action, bookingId) {
                 break;
 
             case 'decline':
-                const reason = prompt('Reason for declining (optional):');
-                if (reason !== null) {
-                    await declineBooking(bookingId, reason);
-                    alert('Booking declined.');
-                    await loadDashboardData();
-                }
+                await showReasonModal(
+                    'Decline Booking',
+                    `Provide a reason for declining ${booking.guest_name}'s booking (optional):`,
+                    async (reason) => {
+                        await declineBooking(bookingId, reason);
+                        alert('Booking declined.');
+                        await loadDashboardData();
+                    }
+                );
                 break;
 
             case 'payment':
@@ -408,12 +411,15 @@ async function handleBookingAction(action, bookingId) {
                 break;
 
             case 'cancel':
-                const cancelReason = prompt('Reason for cancellation (optional):');
-                if (cancelReason !== null) {
-                    await cancelBooking(bookingId, cancelReason);
-                    alert('Booking cancelled.');
-                    await loadDashboardData();
-                }
+                await showReasonModal(
+                    'Cancel Booking',
+                    `Provide a reason for cancelling ${booking.guest_name}'s booking (optional):`,
+                    async (reason) => {
+                        await cancelBooking(bookingId, reason);
+                        alert('Booking cancelled.');
+                        await loadDashboardData();
+                    }
+                );
                 break;
         }
     } catch (error) {
@@ -493,6 +499,73 @@ async function showBookingDetails(bookingId) {
 // Close modal
 function closeModal() {
     document.getElementById('bookingModal').classList.remove('active');
+}
+
+// Show reason modal
+function showReasonModal(title, description, onSubmit) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('reasonModal');
+        const titleEl = document.getElementById('reasonModalTitle');
+        const descEl = document.getElementById('reasonModalDescription');
+        const textarea = document.getElementById('reasonInput');
+        const submitBtn = document.getElementById('submitReasonBtn');
+
+        // Set content
+        titleEl.textContent = title;
+        descEl.textContent = description;
+        textarea.value = '';
+
+        // Show modal
+        modal.classList.add('active');
+        textarea.focus();
+
+        // Handle submit
+        const handleSubmit = async () => {
+            const reason = textarea.value.trim();
+            modal.classList.remove('active');
+            cleanup();
+            
+            try {
+                await onSubmit(reason);
+                resolve(reason);
+            } catch (error) {
+                console.error('Submit error:', error);
+                throw error;
+            }
+        };
+
+        // Handle cancel
+        const handleCancel = () => {
+            modal.classList.remove('active');
+            cleanup();
+            resolve(null);
+        };
+
+        // Cleanup listeners
+        const cleanup = () => {
+            submitBtn.removeEventListener('click', handleSubmit);
+            textarea.removeEventListener('keydown', handleKeydown);
+        };
+
+        // Handle keyboard shortcuts
+        const handleKeydown = (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                handleSubmit();
+            } else if (e.key === 'Escape') {
+                handleCancel();
+            }
+        };
+
+        // Attach listeners
+        submitBtn.addEventListener('click', handleSubmit);
+        textarea.addEventListener('keydown', handleKeydown);
+    });
+}
+
+// Close reason modal
+function closeReasonModal() {
+    document.getElementById('reasonModal').classList.remove('active');
+    document.getElementById('reasonInput').value = '';
 }
 
 // Display apartments
