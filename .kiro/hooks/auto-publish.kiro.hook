@@ -1,5 +1,5 @@
 {
-  "enabled": true,
+  "enabled": false,
   "name": "Auto Publish to GitHub",
   "description": "Automatically publishes changes to GitHub when files are saved with cleanup and size enforcement",
   "version": "1",
