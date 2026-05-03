@@ -184,6 +184,15 @@ function initializeEventListeners() {
     // Reason modal close
     document.getElementById('closeReasonModal').addEventListener('click', closeReasonModal);
     document.getElementById('cancelReasonBtn').addEventListener('click', closeReasonModal);
+    
+    // Close reason modal when clicking overlay
+    document.querySelectorAll('#reasonModal .modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeReasonModal();
+            }
+        });
+    });
 }
 
 // Load dashboard data
