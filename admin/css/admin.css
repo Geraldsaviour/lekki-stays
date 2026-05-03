@@ -207,5 +207,56 @@ body {
     
     .login-card {
         padding: 2rem 1.5rem;
+        border-radius: 12px;
+    }
+    
+    .logo h1 {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 0.875rem;
+    }
+    
+    .form-group input {
+        padding: 0.75rem;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .btn-primary {
+        padding: 0.875rem;
+        font-size: 0.9375rem;
+    }
+    
+    .error-message {
+        padding: 0.75rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    .btn-primary {
+        min-height: 44px; /* iOS recommended touch target */
+    }
+    
+    .form-group input {
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .login-page {
+        padding: 1rem 0;
+    }
+    
+    .login-card {
+        padding: 1.5rem 2rem;
+    }
+    
+    .logo {
+        margin-bottom: 1.5rem;
     }
 }
