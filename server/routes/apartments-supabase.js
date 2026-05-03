@@ -2,6 +2,27 @@ const express = require('express');
 const router = express.Router();
 const { supabase } = require('../config/supabase');
 
+// Helper function to transform apartment data from snake_case to camelCase
+const transformApartment = (apt) => {
+  return {
+    id: apt.id,
+    name: apt.name,
+    slug: apt.slug,
+    location: apt.location,
+    pricePerNight: apt.price_per_night,
+    maxGuests: apt.max_guests,
+    bedrooms: apt.bedrooms,
+    bathrooms: apt.bathrooms,
+    description: apt.description,
+    amenities: apt.amenities,
+    images: apt.images,
+    active: apt.active,
+    createdAt: apt.created_at,
+    // Add totalPrice if it exists
+    ...(apt.totalPrice && { totalPrice: apt.totalPrice })
+  };
+};
+
 // Helper function to calculate nights between dates
 const calculateNights = (checkIn, checkOut) => {
   const start = new Date(checkIn);
@@ -169,14 +190,14 @@ router.get('/', async (req, res) => {
       return res.json({
         success: true,
         count: availableApartments.length,
-        apartments: availableApartments
+        apartments: availableApartments.map(transformApartment)
       });
     }
     
     res.json({
       success: true,
       count: apartments.length,
-      apartments
+      apartments: apartments.map(transformApartment)
     });
     
   } catch (error) {
