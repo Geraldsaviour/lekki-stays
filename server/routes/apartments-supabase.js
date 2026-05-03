@@ -116,10 +116,10 @@ router.post('/availability', async (req, res) => {
           });
         
         if (isAvailable && (!guests || apt.max_guests >= guests)) {
-          availableApartments.push({
+          availableApartments.push(transformApartment({
             ...apt,
             totalPrice: apt.price_per_night * nights
-          });
+          }));
         }
       }
       
@@ -233,7 +233,7 @@ router.get('/:id', async (req, res) => {
     
     res.json({
       success: true,
-      apartment
+      apartment: transformApartment(apartment)
     });
     
   } catch (error) {
