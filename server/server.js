@@ -174,9 +174,9 @@ app.use((req, res, next) => {
 });
 
 // Explicit routes for main static files
-// API Routes - Using old routes temporarily (will be replaced with Supabase in Phase 1)
-app.use('/api/apartments', require('./routes/apartments'));
-app.use('/api/bookings', require('./routes/bookings'));
+// API Routes - Now using Supabase!
+app.use('/api/apartments', require('./routes/apartments-supabase'));
+app.use('/api/bookings', require('./routes/bookings-supabase'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/payments', require('./routes/payments'));
 
