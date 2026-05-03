@@ -314,9 +314,9 @@ function populateReviewsSection() {
     const averageRating = document.getElementById('averageRating');
     
     if (currentListing.reviews && currentListing.reviews.length > 0) {
-        // Calculate average rating
-        const totalRating = currentListing.reviews.reduce((sum, review) => sum + review.rating, 0);
-        const avgRating = (totalRating / currentListing.reviews.length).toFixed(1);
+        // Use average rating from API or calculate it
+        const avgRating = currentListing.averageRating || 
+                         (currentListing.reviews.reduce((sum, review) => sum + review.rating, 0) / currentListing.reviews.length).toFixed(1);
         
         averageRating.innerHTML = `<span class="star-rating">★</span> ${avgRating}`;
         
@@ -325,11 +325,22 @@ function populateReviewsSection() {
         currentListing.reviews.forEach(review => {
             const reviewCard = document.createElement('div');
             reviewCard.className = 'review-card';
+            
+            // Format date - handle both API format (review_date) and old format (date)
+            const reviewDate = review.review_date || review.date;
+            const formattedDate = reviewDate ? new Date(reviewDate).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long' 
+            }) : '';
+            
+            // Handle both API format (guest_name) and old format (name)
+            const reviewerName = review.guest_name || review.name || 'Anonymous';
+            
             reviewCard.innerHTML = `
                 <div class="review-header">
                     <div class="reviewer-info">
-                        <div class="reviewer-name">${review.name}</div>
-                        <div class="review-date">${review.date}</div>
+                        <div class="reviewer-name">${reviewerName}</div>
+                        <div class="review-date">${formattedDate}</div>
                     </div>
                     <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
                 </div>
