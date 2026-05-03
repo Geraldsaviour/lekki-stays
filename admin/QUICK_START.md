@@ -6,7 +6,7 @@
 
 1. Go to: https://supabase.com/dashboard/project/kqlxdjkwklcvxfexevsi/auth/users
 2. Click **"Add user"** → **"Create new user"**
-3. Email: `admin@luxstay.ng`
+3. Email: `geraldsaviour2@gmail.com`
 4. Password: (create strong password)
 5. ✅ Check "Auto Confirm User"
 6. Click **"Create user"**
@@ -47,7 +47,7 @@ python -m http.server 3001
 Visit: http://localhost:3001
 
 Login:
-- Email: `admin@luxstay.ng`
+- Email: `geraldsaviour2@gmail.com`
 - Password: (your password)
 
 ### 4. Deploy

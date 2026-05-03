@@ -49,7 +49,7 @@ Visit: https://supabase.com/dashboard/project/kqlxdjkwklcvxfexevsi/auth/users
 1. Click **"Add user"** button (top right)
 2. Select **"Create new user"**
 3. Fill in the form:
-   - **Email**: `admin@luxstay.ng`
+   - **Email**: `geraldsaviour2@gmail.com`
    - **Password**: (create a strong password - **SAVE THIS!**)
    - **Auto Confirm User**: ✅ **CHECK THIS BOX** (important!)
 4. Click **"Create user"**

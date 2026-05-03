@@ -34,7 +34,7 @@ export const SUPABASE_ANON_KEY = 'your-anon-key-here';
 In Supabase Dashboard:
 1. Go to Authentication → Users
 2. Click "Add user"
-3. Email: `admin@luxstay.ng`
+3. Email: `geraldsaviour2@gmail.com`
 4. Password: (create strong password)
 5. Confirm email automatically
 
@@ -74,7 +74,7 @@ Visit: **http://localhost:3001**
 
 ### 5. Login
 
-- Email: `admin@luxstay.ng`
+- Email: `geraldsaviour2@gmail.com`
 - Password: (your password from step 2)
 
 ## 📋 Booking Workflow

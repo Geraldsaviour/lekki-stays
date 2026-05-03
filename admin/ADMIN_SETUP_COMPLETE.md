@@ -69,7 +69,7 @@ CANCELLED
 3. Navigate to **Authentication** → **Users**
 4. Click **"Add user"** → **"Create new user"**
 5. Enter:
-   - Email: `admin@luxstay.ng`
+   - Email: `geraldsaviour2@gmail.com`
    - Password: (create a strong password - save it securely!)
    - Auto Confirm User: ✅ (check this box)
 6. Click **"Create user"**
@@ -115,7 +115,7 @@ php -S localhost:3001
 Visit: **http://localhost:3001**
 
 Login with:
-- Email: `admin@luxstay.ng`
+- Email: `geraldsaviour2@gmail.com`
 - Password: (your password from Step 1)
 
 ### Step 4: Test All Features

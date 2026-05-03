@@ -61,7 +61,7 @@ Update `admin/js/config.js` with your Supabase credentials from `server/.env`:
 ### Step 3: Create Admin User
 
 In Supabase Dashboard → Authentication → Users:
-- Add user with email: admin@luxstay.ng
+- Add user with email: geraldsaviour2@gmail.com
 - Set strong password
 - Confirm email
 
