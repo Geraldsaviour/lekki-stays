@@ -639,6 +639,10 @@
     .sidebar {
         width: 220px;
     }
+    
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -651,19 +655,76 @@
         height: auto;
         border-right: none;
         border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    
+    .sidebar-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .sidebar-header h2 {
+        font-size: 1.25rem;
     }
     
     .sidebar-nav {
         flex-direction: row;
         overflow-x: auto;
+        padding: 0.75rem 1rem;
+        gap: 0.25rem;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .nav-item {
+        flex-shrink: 0;
+        padding: 0.75rem;
+        min-width: auto;
     }
     
     .nav-item span {
         display: none;
     }
     
+    .nav-item i {
+        margin: 0;
+    }
+    
+    .sidebar-footer {
+        padding: 1rem;
+    }
+    
+    .user-info {
+        padding: 0.5rem;
+    }
+    
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .user-email {
+        font-size: 0.75rem;
+    }
+    
     .dashboard-header {
         padding: 1.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .header-actions {
+        width: 100%;
+    }
+    
+    .btn-refresh {
+        width: 100%;
+        justify-content: center;
     }
     
     .content-section {
@@ -672,5 +733,242 @@
     
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .filters {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .filter-select,
+    .search-input {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .booking-card {
+        padding: 1rem;
+    }
+    
+    .booking-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .booking-guest-info h3 {
+        font-size: 1rem;
+    }
+    
+    .booking-details {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .booking-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .btn-action {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .apartments-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        max-height: 85vh;
+    }
+    
+    .modal-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.25rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar-header h2 {
+        font-size: 1.125rem;
+    }
+    
+    .sidebar-subtitle {
+        font-size: 0.75rem;
+    }
+    
+    .dashboard-header {
+        padding: 1rem;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .content-section {
+        padding: 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-card {
+        padding: 0.875rem;
+    }
+    
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .stat-value {
+        font-size: 1.25rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8125rem;
+    }
+    
+    .recent-section {
+        padding: 1rem;
+    }
+    
+    .booking-card {
+        padding: 0.875rem;
+    }
+    
+    .booking-guest-info h3 {
+        font-size: 0.9375rem;
+    }
+    
+    .booking-contact {
+        font-size: 0.8125rem;
+    }
+    
+    .booking-details {
+        grid-template-columns: 1fr;
+    }
+    
+    .booking-detail-label {
+        font-size: 0.6875rem;
+    }
+    
+    .booking-detail-value {
+        font-size: 0.875rem;
+    }
+    
+    .btn-action {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.8125rem;
+    }
+    
+    .apartment-card {
+        margin-bottom: 1rem;
+    }
+    
+    .apartment-content {
+        padding: 1rem;
+    }
+    
+    .apartment-name {
+        font-size: 1rem;
+    }
+    
+    .apartment-specs {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    
+    .modal-content {
+        width: 100%;
+        max-height: 90vh;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .modal-header {
+        padding: 0.875rem 1rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.125rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .sidebar {
+        position: relative;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .booking-details {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Tablet specific */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .apartments-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .booking-details {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    .btn-action,
+    .btn-refresh,
+    .btn-logout,
+    .nav-item {
+        min-height: 44px; /* iOS recommended touch target */
+    }
+    
+    .filter-select,
+    .search-input {
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
     }
 }
