@@ -74,6 +74,13 @@ class SearchResults {
                 
                 if (response.success && response.available) {
                     this.apartments = response.available;
+                    
+                    // Filter by location if provided
+                    if (this.searchParams.location && this.searchParams.location !== 'Any location') {
+                        this.apartments = this.apartments.filter(apt => 
+                            apt.location.toLowerCase().includes(this.searchParams.location.toLowerCase())
+                        );
+                    }
                 } else {
                     this.apartments = [];
                 }
@@ -84,6 +91,13 @@ class SearchResults {
                 
                 if (response.success && response.apartments) {
                     this.apartments = response.apartments;
+                    
+                    // Filter by location if provided
+                    if (this.searchParams.location && this.searchParams.location !== 'Any location') {
+                        this.apartments = this.apartments.filter(apt => 
+                            apt.location.toLowerCase().includes(this.searchParams.location.toLowerCase())
+                        );
+                    }
                     
                     // Filter by guest count if provided
                     if (guests > 1) {
