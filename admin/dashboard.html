@@ -190,6 +190,32 @@
         </div>
     </div>
 
+    <!-- Reason Input Modal -->
+    <div id="reasonModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-reason">
+            <div class="modal-header">
+                <h2 id="reasonModalTitle">Provide Reason</h2>
+                <button class="modal-close" id="closeReasonModal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="reasonModalDescription" class="reason-description"></p>
+                <textarea 
+                    id="reasonInput" 
+                    class="reason-textarea" 
+                    placeholder="Enter reason (optional)..."
+                    rows="4"
+                ></textarea>
+                <div class="reason-actions">
+                    <button class="btn-secondary" id="cancelReasonBtn">Cancel</button>
+                    <button class="btn-primary" id="submitReasonBtn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>

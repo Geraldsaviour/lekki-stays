@@ -49,6 +49,8 @@ CREATE TABLE IF NOT EXISTS bookings (
   paid_at TIMESTAMPTZ,
   declined_at TIMESTAMPTZ,
   cancelled_at TIMESTAMPTZ,
+  decline_reason TEXT,
+  cancellation_reason TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
