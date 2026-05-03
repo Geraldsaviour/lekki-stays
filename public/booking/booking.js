@@ -156,7 +156,9 @@ function showDateConflictPopup(booking) {
 }
 
 function goBackToListing() {
-    window.location.href = `../listings/listing-${bookingData.id}.html`;
+    // Convert apartment ID to listing number (apt-1 -> 1, apt-2 -> 2, etc.)
+    const listingNumber = bookingData.id.replace('apt-', '');
+    window.location.href = `../listings/listing-${listingNumber}.html`;
 }
 
 function contactViaWhatsApp() {
