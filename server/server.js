@@ -157,6 +157,29 @@ app.get('/api-client.js', (req, res) => {
   }
 });
 
+// Serve shared/api-client.js
+app.get('/shared/api-client.js', (req, res) => {
+  console.log('Serving shared/api-client.js');
+  res.setHeader('Content-Type', 'application/javascript');
+  // Try multiple locations
+  const serverSharedPath = path.join(__dirname, 'shared', 'api-client.js');
+  const publicSharedPath = path.join(__dirname, '..', 'public', 'shared', 'api-client.js');
+  const serverPath = path.join(__dirname, 'api-client.js');
+  const rootPath = path.join(__dirname, '..', 'api-client.js');
+  
+  if (fs.existsSync(serverSharedPath)) {
+    res.sendFile(serverSharedPath);
+  } else if (fs.existsSync(publicSharedPath)) {
+    res.sendFile(publicSharedPath);
+  } else if (fs.existsSync(serverPath)) {
+    res.sendFile(serverPath);
+  } else if (fs.existsSync(rootPath)) {
+    res.sendFile(rootPath);
+  } else {
+    res.status(404).send('File not found');
+  }
+});
+
 // Test file
 app.get('/test.txt', (req, res) => {
   console.log('Serving test.txt');
