@@ -4,7 +4,7 @@
  * Handles all apartment-related database operations using Supabase
  */
 
-const { supabasePublic, supabaseAdmin } = require('../supabase-client');
+const { supabase, supabasePublic } = require('../config/supabase');
 
 class Apartment {
   constructor(data) {

@@ -4,7 +4,7 @@
  * Handles all booking-related database operations using Supabase
  */
 
-const { supabasePublic, supabaseAdmin } = require('../supabase-client');
+const { supabase, supabasePublic } = require('../config/supabase');
 const crypto = require('crypto');
 
 class Booking {
@@ -63,7 +63,7 @@ class Booking {
     };
 
     // Insert using service role (bypasses RLS)
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('bookings')
       .insert(insertData)
       .select()
