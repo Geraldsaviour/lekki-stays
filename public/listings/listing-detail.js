@@ -53,50 +53,85 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeDetailPage();
 });
 
-function initializeDetailPage() {
-    // Get listing ID from body data attribute
-    const listingId = parseInt(document.body.getAttribute('data-listing-id'));
+async function initializeDetailPage() {
+    // Get listing number from URL (e.g., listing-6.html -> 6)
+    const urlPath = window.location.pathname;
+    const listingNumber = urlPath.match(/listing-(\d+)\.html/)?.[1];
     
-    // Find the listing data
-    currentListing = havenListings.find(listing => listing.id === listingId);
-    
-    if (!currentListing) {
-        console.error('Listing not found:', listingId);
+    if (!listingNumber) {
+        console.error('Could not determine listing number from URL');
         return;
     }
     
-    // Load booking data from URL parameters
-    loadBookingDataFromURL();
+    // Convert listing number to apartment ID (6 -> apt-6)
+    const apartmentId = `apt-${listingNumber}`;
     
-    // Fetch booked dates for this apartment
-    fetchBookedDates();
-    
-    // Populate all sections
-    populatePropertyInfo();
-    populateImageGallery();
-    populateAmenities();
-    populateBookingPanel();
-    populateLocationSection();
-    populateReviewsSection();
-    
-    // Initialize interactions
-    initializeImageGallery();
-    initializeBookingPanel();
-    initializeMobileMenu();
+    try {
+        // Fetch apartment data from API
+        const response = await window.lekkirStaysAPI.getApartment(apartmentId);
+        
+        if (!response.success || !response.apartment) {
+            console.error('Failed to load apartment data:', response);
+            showErrorState();
+            return;
+        }
+        
+        // Set current listing from API data
+        currentListing = response.apartment;
+        
+        // Load booking data from URL parameters
+        loadBookingDataFromURL();
+        
+        // Fetch booked dates for this apartment
+        fetchBookedDates(apartmentId);
+        
+        // Populate all sections
+        populatePropertyInfo();
+        populateImageGallery();
+        populateAmenities();
+        populateBookingPanel();
+        populateLocationSection();
+        populateReviewsSection();
+        
+        // Initialize interactions
+        initializeImageGallery();
+        initializeBookingPanel();
+        initializeMobileMenu();
+        
+    } catch (error) {
+        console.error('Error loading apartment:', error);
+        showErrorState();
+    }
+}
+
+function showErrorState() {
+    document.body.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; text-align: center;">
+            <h1 style="font-size: 2rem; margin-bottom: 1rem;">Apartment Not Found</h1>
+            <p style="margin-bottom: 2rem;">Sorry, we couldn't load this apartment's details.</p>
+            <a href="../index.html" style="padding: 1rem 2rem; background: #D4AF37; color: white; text-decoration: none; border-radius: 8px;">Back to Home</a>
+        </div>
+    `;
 }
 
 // ===== PROPERTY INFO SECTION =====
 function populatePropertyInfo() {
     document.getElementById('propertyTitle').textContent = currentListing.name;
+    
+    // Handle both API format (maxGuests) and old format (guests)
+    const guests = currentListing.maxGuests || currentListing.guests || 1;
+    const bedrooms = currentListing.bedrooms || 1;
+    const bathrooms = currentListing.bathrooms || 1;
+    
     document.getElementById('propertySpecs').innerHTML = `
-        <span>${currentListing.guests} guest${currentListing.guests > 1 ? 's' : ''}</span>
+        <span>${guests} guest${guests > 1 ? 's' : ''}</span>
         <div class="spec-divider"></div>
-        <span>${currentListing.bedrooms} bedroom${currentListing.bedrooms > 1 ? 's' : ''}</span>
+        <span>${bedrooms} bedroom${bedrooms > 1 ? 's' : ''}</span>
         <div class="spec-divider"></div>
-        <span>${currentListing.bathrooms} bathroom${currentListing.bathrooms > 1 ? 's' : ''}</span>
+        <span>${bathrooms} bathroom${bathrooms > 1 ? 's' : ''}</span>
     `;
-    document.getElementById('categoryBadge').textContent = currentListing.category;
-    document.getElementById('propertyDescription').textContent = currentListing.description;
+    document.getElementById('categoryBadge').textContent = currentListing.category || 'Luxury';
+    document.getElementById('propertyDescription').textContent = currentListing.description || '';
 }
 
 // ===== IMAGE GALLERY SECTION =====
