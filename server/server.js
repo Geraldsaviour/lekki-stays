@@ -174,11 +174,11 @@ app.use((req, res, next) => {
 });
 
 // Explicit routes for main static files
-// API Routes - Using Firebase
-app.use('/api/apartments', require('./routes/apartments-firebase'));
-app.use('/api/bookings', require('./routes/bookings-firebase'));
-app.use('/api/notifications', require('./routes/notifications-firebase'));
-app.use('/api/payments', require('./routes/payments-firebase'));
+// API Routes - Using old routes temporarily (will be replaced with Supabase in Phase 1)
+app.use('/api/apartments', require('./routes/apartments'));
+app.use('/api/bookings', require('./routes/bookings'));
+app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/payments', require('./routes/payments'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
