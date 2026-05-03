@@ -460,8 +460,8 @@ async function handleSubmit() {
 function calculateTotalPrice() {
     const nights = Math.ceil((bookingData.checkout - bookingData.checkin) / (1000 * 60 * 60 * 24));
     const subtotal = currentListing.pricePerNight * nights;
-    const cautionFee = 10000;
-    return subtotal + cautionFee;
+    // Backend expects just the subtotal (nights × price per night), not including caution fee
+    return subtotal;
 }
 
 function getFormData() {

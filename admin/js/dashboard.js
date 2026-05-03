@@ -48,6 +48,7 @@ function initializeMobileMenu() {
         mobileMenuToggle.addEventListener('click', () => {
             sidebar.classList.add('active');
             sidebarOverlay.classList.add('active');
+            mobileMenuToggle.classList.add('hidden'); // Hide hamburger button
             document.body.style.overflow = 'hidden'; // Prevent background scrolling
         });
     }
@@ -56,6 +57,9 @@ function initializeMobileMenu() {
     const closeSidebar = () => {
         sidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
+        if (mobileMenuToggle) {
+            mobileMenuToggle.classList.remove('hidden'); // Show hamburger button
+        }
         document.body.style.overflow = ''; // Restore scrolling
     };
 
