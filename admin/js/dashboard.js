@@ -861,7 +861,6 @@ function initializeReceiptModal() {
             initializeLucideIcons();
 
             const amount = parseInt(amountInput.value);
-            const reference = referenceInput.value.trim();
 
             // Verify amount matches
             if (amount !== currentReceiptBooking.total_price) {
@@ -905,7 +904,6 @@ function initializeReceiptModal() {
                     payment_receipt_url: receiptUrl,
                     payment_receipt_uploaded_at: new Date().toISOString(),
                     payment_amount: amount,
-                    payment_reference: reference,
                     payment_verified_by: user.email,
                     status: 'paid',
                     paid_at: new Date().toISOString()
@@ -938,16 +936,14 @@ function initializeReceiptModal() {
 function validateReceiptForm() {
     const fileInput = document.getElementById('receiptUpload');
     const amountInput = document.getElementById('receiptAmount');
-    const referenceInput = document.getElementById('receiptReference');
     const checkboxes = document.querySelectorAll('.checkbox-label input[type="checkbox"]');
     const submitBtn = document.getElementById('submitReceiptBtn');
 
     const hasFile = fileInput?.files.length > 0;
     const hasAmount = amountInput?.value && parseInt(amountInput.value) > 0;
-    const hasReference = referenceInput?.value.trim().length > 0;
     const allChecked = Array.from(checkboxes).every(cb => cb.checked);
 
-    const isValid = hasFile && hasAmount && hasReference && allChecked;
+    const isValid = hasFile && hasAmount && allChecked;
     
     if (submitBtn) {
         submitBtn.disabled = !isValid;
@@ -957,7 +953,6 @@ function validateReceiptForm() {
 function resetReceiptForm() {
     document.getElementById('receiptUpload').value = '';
     document.getElementById('receiptAmount').value = '';
-    document.getElementById('receiptReference').value = '';
     document.getElementById('receiptPreview').style.display = 'none';
     document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb => cb.checked = false);
     currentReceiptBooking = null;
