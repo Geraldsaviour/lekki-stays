@@ -260,11 +260,89 @@
                 <div class="success-state" id="successState" style="display: none;">
                     <div class="success-content">
                         <div class="success-icon">
-                            <i data-lucide="check-circle" style="width: 64px; height: 64px; color: var(--success);"></i>
+                            <i data-lucide="check-circle" style="width: 80px; height: 80px; color: #10B981;"></i>
                         </div>
-                        <h2>Reservation Received!</h2>
-                        <p id="successMessage"></p>
-                        <button class="btn-primary" onclick="window.location.href='../index.html'">Back to Home</button>
+                        <h2 class="success-title">Reservation Confirmed!</h2>
+                        <p class="success-subtitle">Thank you for choosing LuxStay</p>
+                        
+                        <div class="success-details">
+                            <div class="success-section">
+                                <h3>Booking Details</h3>
+                                <div class="detail-grid">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Booking ID</span>
+                                        <span class="detail-value" id="successBookingId">#BK-XXXXX</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Guest Name</span>
+                                        <span class="detail-value" id="successGuestName">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Apartment</span>
+                                        <span class="detail-value" id="successApartment">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Check-in</span>
+                                        <span class="detail-value" id="successCheckin">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Check-out</span>
+                                        <span class="detail-value" id="successCheckout">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Guests</span>
+                                        <span class="detail-value" id="successGuests">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Total Amount</span>
+                                        <span class="detail-value success-amount" id="successTotal">₦0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="success-section">
+                                <h3>What Happens Next?</h3>
+                                <div class="next-steps">
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h4>Confirmation</h4>
+                                            <p>Our team will review your booking and contact you within 24 hours</p>
+                                        </div>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h4>Payment</h4>
+                                            <p>You'll receive payment instructions via WhatsApp or email</p>
+                                        </div>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h4>Check-in Details</h4>
+                                            <p>We'll send you check-in instructions 24 hours before arrival</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="success-section">
+                                <h3>Need Help?</h3>
+                                <p class="contact-info">Contact us on WhatsApp: <a href="https://wa.me/2349039269846" class="whatsapp-link">+234 903 926 9846</a></p>
+                            </div>
+                        </div>
+
+                        <div class="success-actions">
+                            <button class="btn-primary" onclick="window.location.href='../index.html'">
+                                <i data-lucide="home"></i>
+                                <span>Back to Home</span>
+                            </button>
+                            <button class="btn-secondary" onclick="window.print()">
+                                <i data-lucide="printer"></i>
+                                <span>Print Confirmation</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
