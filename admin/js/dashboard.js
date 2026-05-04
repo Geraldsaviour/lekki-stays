@@ -149,7 +149,13 @@ function initializeEventListeners() {
     document.getElementById('logoutBtn').addEventListener('click', async () => {
         try {
             await signOut();
-            window.location.href = 'index.html';
+            
+            // Clear any cached data
+            sessionStorage.clear();
+            localStorage.clear();
+            
+            // Force redirect to login page
+            window.location.replace('index.html');
         } catch (error) {
             console.error('Logout error:', error);
             alert('Failed to logout. Please try again.');
