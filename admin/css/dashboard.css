@@ -1639,11 +1639,18 @@
 .receipt-info p {
     margin: 0.5rem 0;
     font-size: 0.95rem;
+    color: #000000;
 }
 
 .receipt-info strong {
-    color: #666;
+    color: #000000;
+    font-weight: 600;
+}
+
+.receipt-info span {
+    color: #000000;
     font-weight: 500;
+}
 }
 
 .file-input {
