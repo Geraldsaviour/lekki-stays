@@ -308,27 +308,28 @@ body {
     align-items: center;
     gap: 16px;
     padding: 14px;
-    border: 2px solid #eee;
+    border: 2px solid #D4AF37;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    background: rgba(212, 175, 55, 0.05);
 }
 
 .payment-option:hover {
     border-color: #D4AF37;
-    background: rgba(212, 175, 55, 0.02);
+    background: rgba(212, 175, 55, 0.08);
 }
 
 .payment-option.selected {
     border-color: #D4AF37;
-    background: rgba(212, 175, 55, 0.05);
+    background: rgba(212, 175, 55, 0.1);
 }
 
 .option-icon {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(212, 175, 55, 0.1);
+    background: rgba(212, 175, 55, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -353,7 +354,7 @@ body {
 .option-radio {
     width: 20px;
     height: 20px;
-    border: 2px solid #ddd;
+    border: 2px solid #D4AF37;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -369,12 +370,38 @@ body {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: transparent;
+    background: #D4AF37;
     transition: all 0.3s ease;
 }
 
 .radio-dot.active {
     background: #D4AF37;
+}
+
+.payment-note {
+    display: flex;
+    gap: 12px;
+    align-items: start;
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(212, 175, 55, 0.05);
+    border-left: 3px solid #D4AF37;
+    border-radius: 4px;
+}
+
+.payment-note i {
+    width: 20px;
+    height: 20px;
+    color: #D4AF37;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.payment-note p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
 }
 
 /* === ROW 2 - FORM === */

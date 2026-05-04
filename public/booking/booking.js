@@ -231,13 +231,8 @@ function populateBookingData() {
 
 // === PAYMENT OPTIONS ===
 function initializeInteractions() {
-    // Payment option selection
-    const paymentOptions = document.querySelectorAll('.payment-option');
-    paymentOptions.forEach(option => {
-        option.addEventListener('click', () => {
-            selectPaymentMethod(option.dataset.method);
-        });
-    });
+    // Payment method is fixed to WhatsApp (only one option)
+    selectedPaymentMethod = 'whatsapp';
     
     // Form validation
     initializeFormValidation();
@@ -252,6 +247,7 @@ function initializeInteractions() {
     initializeMobileMenu();
 }
 
+// Payment selection function (kept for compatibility but not used)
 function selectPaymentMethod(method) {
     selectedPaymentMethod = method;
     
