@@ -429,15 +429,8 @@ async function handleBookingAction(action, bookingId) {
                 break;
 
             case 'paid':
-                const paidResult = await showConfirm(
-                    `Mark booking as paid for ${booking.guest_name}?`,
-                    'Mark as Paid'
-                );
-                if (paidResult) {
-                    await markAsPaid(bookingId);
-                    await showAlert('Booking marked as paid!');
-                    await loadDashboardData();
-                }
+                // Open receipt upload modal instead of directly marking as paid
+                await showReceiptModal(booking);
                 break;
 
             case 'cancel':
@@ -801,3 +794,186 @@ function initializeLucideIcons() {
         lucide.createIcons();
     }
 }
+
+
+// ===== PAYMENT RECEIPT MODAL =====
+let currentReceiptBooking = null;
+let uploadedReceiptFile = null;
+
+function initializeReceiptModal() {
+    const modal = document.getElementById('receiptModal');
+    const closeBtn = document.getElementById('closeReceiptModal');
+    const cancelBtn = document.getElementById('cancelReceiptBtn');
+    const submitBtn = document.getElementById('submitReceiptBtn');
+    const fileInput = document.getElementById('receiptUpload');
+    const amountInput = document.getElementById('receiptAmount');
+    const referenceInput = document.getElementById('receiptReference');
+    const checkboxes = document.querySelectorAll('.checkbox-label input[type="checkbox"]');
+
+    // Close modal
+    const closeModal = () => {
+        modal.classList.remove('active');
+        resetReceiptForm();
+    };
+
+    closeBtn?.addEventListener('click', closeModal);
+    cancelBtn?.addEventListener('click', closeModal);
+    modal?.querySelector('.modal-overlay')?.addEventListener('click', closeModal);
+
+    // File upload preview
+    fileInput?.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            uploadedReceiptFile = file;
+            
+            // Show preview for images
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const preview = document.getElementById('receiptPreview');
+                    const img = document.getElementById('receiptImage');
+                    img.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            validateReceiptForm();
+        }
+    });
+
+    // Input validation
+    amountInput?.addEventListener('input', validateReceiptForm);
+    referenceInput?.addEventListener('input', validateReceiptForm);
+    checkboxes.forEach(cb => cb.addEventListener('change', validateReceiptForm));
+
+    // Submit receipt
+    submitBtn?.addEventListener('click', async () => {
+        if (!currentReceiptBooking || !uploadedReceiptFile) return;
+
+        try {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i data-lucide="loader"></i> Uploading...';
+            initializeLucideIcons();
+
+            const amount = parseInt(amountInput.value);
+            const reference = referenceInput.value.trim();
+
+            // Verify amount matches
+            if (amount !== currentReceiptBooking.total_price) {
+                await showAlert(
+                    `Amount mismatch! Expected ₦${currentReceiptBooking.total_price.toLocaleString()}, but receipt shows ₦${amount.toLocaleString()}.`,
+                    'error'
+                );
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i data-lucide="check"></i> Verify & Mark as Paid';
+                initializeLucideIcons();
+                return;
+            }
+
+            // Upload receipt to Supabase Storage
+            const fileName = `receipt-${currentReceiptBooking.booking_ref}-${Date.now()}.${uploadedReceiptFile.name.split('.').pop()}`;
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('payment-receipts')
+                .upload(fileName, uploadedReceiptFile);
+
+            if (uploadError) {
+                console.error('Upload error:', uploadError);
+                await showAlert('Failed to upload receipt. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i data-lucide="check"></i> Verify & Mark as Paid';
+                initializeLucideIcons();
+                return;
+            }
+
+            // Get public URL
+            const { data: urlData } = supabase.storage
+                .from('payment-receipts')
+                .getPublicUrl(fileName);
+
+            const receiptUrl = urlData.publicUrl;
+
+            // Update booking with receipt info and mark as paid
+            const user = await getCurrentUser();
+            const { error: updateError } = await supabase
+                .from('bookings')
+                .update({
+                    payment_receipt_url: receiptUrl,
+                    payment_receipt_uploaded_at: new Date().toISOString(),
+                    payment_amount: amount,
+                    payment_reference: reference,
+                    payment_verified_by: user.email,
+                    status: 'paid',
+                    paid_at: new Date().toISOString()
+                })
+                .eq('id', currentReceiptBooking.id);
+
+            if (updateError) {
+                console.error('Update error:', updateError);
+                await showAlert('Failed to update booking. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i data-lucide="check"></i> Verify & Mark as Paid';
+                initializeLucideIcons();
+                return;
+            }
+
+            await showAlert('Payment verified and booking marked as paid!', 'success');
+            closeModal();
+            await loadDashboardData();
+
+        } catch (error) {
+            console.error('Receipt upload error:', error);
+            await showAlert('An error occurred. Please try again.', 'error');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="check"></i> Verify & Mark as Paid';
+            initializeLucideIcons();
+        }
+    });
+}
+
+function validateReceiptForm() {
+    const fileInput = document.getElementById('receiptUpload');
+    const amountInput = document.getElementById('receiptAmount');
+    const referenceInput = document.getElementById('receiptReference');
+    const checkboxes = document.querySelectorAll('.checkbox-label input[type="checkbox"]');
+    const submitBtn = document.getElementById('submitReceiptBtn');
+
+    const hasFile = fileInput?.files.length > 0;
+    const hasAmount = amountInput?.value && parseInt(amountInput.value) > 0;
+    const hasReference = referenceInput?.value.trim().length > 0;
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+    const isValid = hasFile && hasAmount && hasReference && allChecked;
+    
+    if (submitBtn) {
+        submitBtn.disabled = !isValid;
+    }
+}
+
+function resetReceiptForm() {
+    document.getElementById('receiptUpload').value = '';
+    document.getElementById('receiptAmount').value = '';
+    document.getElementById('receiptReference').value = '';
+    document.getElementById('receiptPreview').style.display = 'none';
+    document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb => cb.checked = false);
+    currentReceiptBooking = null;
+    uploadedReceiptFile = null;
+}
+
+async function showReceiptModal(booking) {
+    currentReceiptBooking = booking;
+    
+    document.getElementById('receiptBookingRef').textContent = booking.booking_ref;
+    document.getElementById('receiptGuestName').textContent = booking.guest_name;
+    document.getElementById('receiptExpectedAmount').textContent = formatCurrency(booking.total_price);
+    
+    const modal = document.getElementById('receiptModal');
+    modal.classList.add('active');
+    
+    initializeLucideIcons();
+}
+
+// Initialize receipt modal on page load
+document.addEventListener('DOMContentLoaded', () => {
+    initializeReceiptModal();
+});
