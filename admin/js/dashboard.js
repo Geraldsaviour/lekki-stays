@@ -814,7 +814,6 @@ function initializeReceiptModal() {
     const submitBtn = document.getElementById('submitReceiptBtn');
     const fileInput = document.getElementById('receiptUpload');
     const amountInput = document.getElementById('receiptAmount');
-    const referenceInput = document.getElementById('receiptReference');
     const checkboxes = document.querySelectorAll('.checkbox-label input[type="checkbox"]');
 
     // Close modal handlers
@@ -850,7 +849,6 @@ function initializeReceiptModal() {
 
     // Input validation
     amountInput?.addEventListener('input', validateReceiptForm);
-    referenceInput?.addEventListener('input', validateReceiptForm);
     checkboxes.forEach(cb => cb.addEventListener('change', validateReceiptForm));
 
     // Submit receipt
