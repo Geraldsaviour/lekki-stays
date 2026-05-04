@@ -480,19 +480,27 @@ function getFormData() {
 
 function showSuccessState(formData, booking = null) {
     const nights = Math.ceil((bookingData.checkout - bookingData.checkin) / (1000 * 60 * 60 * 24));
+    const subtotal = currentListing.pricePerNight * nights;
+    const cautionFee = 10000;
+    const grandTotal = subtotal + cautionFee;
     
-    let successMessage;
-    if (booking) {
-        successMessage = `Thank you, ${formData.fullName}. Your reservation has been confirmed with booking ID #${booking.id}. We will contact you on ${formData.phone} with further details. Check-in: ${formatDate(bookingData.checkin)} | Check-out: ${formatDate(bookingData.checkout)}`;
-    } else {
-        successMessage = `Thank you, ${formData.fullName}. Your reservation for ${currentListing.name} has been noted. We will contact you on ${formData.phone} to confirm. Check-in: ${formatDate(bookingData.checkin)} | Check-out: ${formatDate(bookingData.checkout)}`;
-    }
-    
-    document.getElementById('successMessage').textContent = successMessage;
+    // Populate success details
+    document.getElementById('successBookingId').textContent = booking ? `#${booking.id}` : '#PENDING';
+    document.getElementById('successGuestName').textContent = formData.fullName;
+    document.getElementById('successApartment').textContent = currentListing.name;
+    document.getElementById('successCheckin').textContent = formatDate(bookingData.checkin);
+    document.getElementById('successCheckout').textContent = formatDate(bookingData.checkout);
+    document.getElementById('successGuests').textContent = `${bookingData.guests} guest${bookingData.guests > 1 ? 's' : ''}`;
+    document.getElementById('successTotal').textContent = `₦${grandTotal.toLocaleString('en-NG')}`;
     
     // Hide booking content and show success state
     document.getElementById('bookingContent').style.display = 'none';
     document.getElementById('successState').style.display = 'block';
+    
+    // Initialize Lucide icons for success state
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
     
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
