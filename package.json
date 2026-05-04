@@ -5,7 +5,10 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "dev": "nodemon server/server.js"
+    "dev": "nodemon server/server.js",
+    "deploy:user": "cp vercel-user.json vercel.json && vercel --prod && rm vercel.json",
+    "deploy:admin": "cp vercel-admin.json vercel.json && vercel --prod && rm vercel.json",
+    "deploy:all": "npm run deploy:user && npm run deploy:admin"
   },
   "keywords": [
     "shortlet",
