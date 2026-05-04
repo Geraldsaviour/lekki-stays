@@ -99,6 +99,45 @@ A modern, secure booking platform for luxury shortlet accommodations in Lagos, N
 
 **Full Guide:** See `docs/FIREBASE_SETUP_GUIDE.md`
 
+## 🌐 Deployment
+
+### 🚀 Deploy to Vercel (Recommended)
+
+We deploy **TWO separate projects** for better security and organization:
+
+1. **User Frontend** - Main booking website (public)
+2. **Admin Dashboard** - Management panel (protected)
+
+#### Quick Deploy (10 minutes):
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy user frontend
+npm run deploy:user
+
+# Deploy admin dashboard
+npm run deploy:admin
+```
+
+#### Detailed Guides:
+- **Quick Start:** See `DEPLOY_QUICK_START.md` (10 min read)
+- **Full Guide:** See `DEPLOYMENT_GUIDE.md` (complete instructions)
+- **Checklist:** See `DEPLOYMENT_CHECKLIST.md` (step-by-step)
+
+#### What You'll Get:
+- ✅ User Frontend: `https://lekki-stays-user.vercel.app`
+- ✅ Admin Dashboard: `https://lekki-stays-admin.vercel.app`
+- ✅ Auto-deploy on Git push
+- ✅ Free SSL certificate
+- ✅ Global CDN
+- ✅ Serverless functions
+
+**Status:** ✅ Ready for deployment! See `DEPLOYMENT_READY.md`
+
+---
+
 ## 🌐 Deployment to Firebase
 
 ### One-Command Deploy
