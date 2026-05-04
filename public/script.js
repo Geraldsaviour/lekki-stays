@@ -1509,9 +1509,9 @@ const havenListings = [
         description: "Stunning three-bedroom penthouse with panoramic views of Lagos lagoon. Features premium finishes, spacious living areas, and exclusive access to rooftop terrace.",
         location: "1161 Memorial Drive, Victoria Island, Lagos",
         amenities: ["Swimming pool", "Kitchen", "Air conditioning", "Balcony", "Rooftop terrace", "WiFi", "Smart TV", "Gym", "Concierge"],
-        images: ["https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80", 
-                "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80", 
-                "https://images.unsplash.com/photo-1574180045827-681f8a1a9622?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80"]
+        images: ["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80", 
+                "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2053&q=80", 
+                "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"]
     },
     {
         id: 4,
