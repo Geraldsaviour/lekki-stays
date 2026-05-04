@@ -1621,3 +1621,134 @@
         border: 1px solid #000;
     }
 }
+
+
+/* ===== PAYMENT RECEIPT MODAL ===== */
+.modal-receipt {
+    max-width: 600px;
+}
+
+.receipt-info {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.receipt-info p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.receipt-info strong {
+    color: #666;
+    font-weight: 500;
+}
+
+.file-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-input:hover {
+    border-color: #D4AF37;
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.file-preview {
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.file-preview img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 4px;
+}
+
+.form-help {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+.receipt-verification {
+    background: #fff9e6;
+    border-left: 3px solid #D4AF37;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1.5rem 0;
+}
+
+.verification-checklist h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #D4AF37;
+}
+
+.checkbox-label span {
+    color: #666;
+}
+
+.checkbox-label input[type="checkbox"]:checked + span {
+    color: #333;
+    font-weight: 500;
+}
+
+.receipt-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.receipt-actions button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.receipt-actions button i {
+    width: 18px;
+    height: 18px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .modal-receipt {
+        max-width: 95%;
+        margin: 1rem;
+    }
+
+    .receipt-actions {
+        flex-direction: column;
+    }
+
+    .receipt-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
