@@ -179,28 +179,55 @@ We look forward to hosting you! 🏡
   /**
    * Generate cancellation confirmation message
    */
-  static generateCancellationMessage(booking, apartment, refundAmount) {
+  static generateCancellationMessage(booking, apartment, refundAmount = 0, cancelledBy = 'guest', reason = null) {
     const hasRefund = refundAmount > 0;
+    const cancelledByHost = cancelledBy === 'host' || cancelledBy === 'admin';
 
-    const message = `
+    let message = `
 🚫 *BOOKING CANCELLED*
 
-Your booking has been cancelled.
-
-📋 *Booking Reference:* ${booking.bookingRef}
-🏨 *Property:* ${apartment.name}
-📅 *Dates:* ${booking.checkIn} to ${booking.checkOut}
-
-${hasRefund 
-  ? `💰 *Refund:*\nAmount: ₦${refundAmount.toLocaleString()}\nProcessing time: 5-7 business days`
-  : `💰 *Refund:*\nNo refund available (cancellation within 48 hours of check-in)`
+${cancelledByHost 
+  ? 'We regret to inform you that your booking has been cancelled by the property host.'
+  : 'Your booking cancellation has been processed.'
 }
 
-We're sorry to see you cancel. We hope to host you in the future!
+📋 *Cancellation Details:*
+Booking Reference: ${booking.bookingRef}
+Property: ${apartment.name}
+Location: ${apartment.location || 'Lagos, Nigeria'}
+Check-in: ${booking.checkIn}
+Check-out: ${booking.checkOut}
+Guests: ${booking.guests}
+Nights: ${booking.getNights()}
 
-Browse available apartments: ${process.env.BASE_URL || 'https://shortlet-booking-khaki.vercel.app'}
+💰 *Payment & Refund:*
+Original Amount: ₦${booking.totalPrice.toLocaleString()}
+${hasRefund 
+  ? `Refund Amount: ₦${refundAmount.toLocaleString()}\nRefund Status: Processing\nExpected: 5-7 business days\nMethod: Original payment method`
+  : `Refund Amount: ₦0\nReason: ${cancelledByHost ? 'Host cancellation - no charges applied' : 'Cancellation within 48 hours of check-in'}`
+}
 
-Questions? Reply to this message.
+${reason ? `📝 *Cancellation Reason:*\n${reason}\n` : ''}
+${cancelledByHost 
+  ? `\n🙏 *Our Sincere Apologies:*\nWe understand this is disappointing and inconvenient. We're here to help you find an alternative accommodation.\n`
+  : `\n✅ *Cancellation Confirmed:*\nYour booking has been successfully cancelled. No further action is required.\n`
+}
+
+${cancelledByHost 
+  ? `💡 *Next Steps:*\n• Browse alternative properties on our website\n• Contact us for personalized recommendations\n• We'll prioritize your next booking\n`
+  : `💡 *Book Again:*\nWe'd love to host you in the future!\n`
+}
+
+🌐 *Find Your Next Stay:*
+${process.env.BASE_URL || 'https://shortlet-booking-khaki.vercel.app'}
+
+📞 *Need Assistance?*
+Reply to this message or call us at ${process.env.HOST_WHATSAPP_NUMBER}
+
+${cancelledByHost 
+  ? 'Thank you for your understanding. We hope to serve you better next time.'
+  : 'We hope to welcome you soon!'
+}
     `.trim();
 
     return message;
