@@ -426,23 +426,15 @@ async function handleSubmit() {
             const booking = response.booking;
             
             console.log('✅ Booking created:', booking);
-            console.log('💳 Payment method:', selectedPaymentMethod);
+            console.log('💬 Opening WhatsApp and showing success page');
             
-            switch (selectedPaymentMethod) {
-                case 'arrival':
-                    console.log('🏠 Pay on Arrival - Showing success page');
-                    showSuccessState(formData, booking);
-                    break;
-                    
-                case 'whatsapp':
-                    console.log('💬 Pay via WhatsApp - Opening WhatsApp and showing success page');
-                    // Use the WhatsApp link from the API response
-                    if (response.whatsappLink) {
-                        window.open(response.whatsappLink, '_blank');
-                    }
-                    showSuccessState(formData, booking);
-                    break;
+            // Open WhatsApp with pre-filled message
+            if (response.whatsappLink) {
+                window.open(response.whatsappLink, '_blank');
             }
+            
+            // Show success page
+            showSuccessState(formData, booking);
         } else {
             throw new Error(response.error || 'Failed to create booking');
         }
