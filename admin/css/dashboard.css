@@ -114,10 +114,23 @@
     border-bottom: 1px solid var(--border);
 }
 
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-logo i {
+    width: 28px;
+    height: 28px;
+    color: var(--primary);
+}
+
 .sidebar-header h2 {
     font-size: 1.5rem;
     color: var(--primary);
-    margin-bottom: 0.25rem;
+    margin: 0;
 }
 
 .sidebar-subtitle {

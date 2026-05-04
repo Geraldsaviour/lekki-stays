@@ -100,3 +100,8 @@ supabase.auth.onAuthStateChanged((event, session) => {
         window.location.href = 'dashboard.html';
     }
 });
+
+// Initialize Lucide icons
+if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+}
