@@ -1,6 +1,6 @@
 # 🚀 Quick Start - Deploy to Vercel
 
-## ⚡ Fast Track Deployment (10 Minutes)
+## ⚡ Fast Track Deployment (30 Minutes)
 
 ### Prerequisites
 - ✅ GitHub account
@@ -51,7 +51,13 @@ chmod +x deploy-user.sh
 ./deploy-user.sh
 ```
 
-### Option B: Manual Deployment
+### Option B: Using NPM
+
+```bash
+npm run deploy:user
+```
+
+### Option C: Manual Deployment
 
 ```bash
 # Copy user config
@@ -99,7 +105,13 @@ chmod +x deploy-admin.sh
 ./deploy-admin.sh
 ```
 
-### Option B: Manual Deployment
+### Option B: Using NPM
+
+```bash
+npm run deploy:admin
+```
+
+### Option C: Manual Deployment
 
 ```bash
 # Copy admin config
@@ -215,3 +227,80 @@ Or check Vercel logs:
 ```bash
 vercel logs
 ```
+
+---
+
+## 🔄 Continuous Deployment
+
+Vercel automatically redeploys when you push to GitHub:
+
+1. Make changes locally
+2. Commit and push to GitHub
+3. Vercel automatically deploys
+4. Check deployment status in Vercel Dashboard
+
+---
+
+## 📝 Quick Reference
+
+### Deploy Commands:
+```bash
+# User frontend
+npm run deploy:user
+
+# Admin dashboard
+npm run deploy:admin
+
+# Both
+npm run deploy:all
+```
+
+### Vercel Commands:
+```bash
+# Login
+vercel login
+
+# Deploy
+vercel --prod
+
+# Check logs
+vercel logs
+
+# List deployments
+vercel ls
+```
+
+### Environment Variables:
+```
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_ANON_KEY=eyJxxx...
+SUPABASE_SERVICE_ROLE_KEY=eyJxxx...
+HOST_WHATSAPP_NUMBER=2348012345678
+NODE_ENV=production
+```
+
+---
+
+## 🎯 Success Criteria
+
+Your deployment is successful when:
+
+- ✅ User frontend loads at Vercel URL
+- ✅ Admin dashboard loads at Vercel URL
+- ✅ Can browse apartments
+- ✅ Can make bookings
+- ✅ Can login to admin
+- ✅ Can manage bookings
+- ✅ Can upload receipts
+- ✅ No console errors
+- ✅ Mobile responsive works
+
+---
+
+## 🚀 Ready to Deploy!
+
+Follow the steps above and your site will be live in ~30 minutes!
+
+**Start with:** Install Vercel CLI → Deploy User → Deploy Admin → Configure → Test
+
+Good luck! 🎉
