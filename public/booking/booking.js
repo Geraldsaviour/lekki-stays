@@ -486,10 +486,16 @@ function getFormData() {
 }
 
 function showSuccessState(formData, booking = null) {
+    console.log('🎉 Showing success state');
+    console.log('Form data:', formData);
+    console.log('Booking:', booking);
+    
     const nights = Math.ceil((bookingData.checkout - bookingData.checkin) / (1000 * 60 * 60 * 24));
     const subtotal = currentListing.pricePerNight * nights;
     const cautionFee = 10000;
     const grandTotal = subtotal + cautionFee;
+    
+    console.log('Calculated totals:', { nights, subtotal, cautionFee, grandTotal });
     
     // Populate success details
     document.getElementById('successBookingId').textContent = booking ? `#${booking.id}` : '#PENDING';
@@ -500,17 +506,23 @@ function showSuccessState(formData, booking = null) {
     document.getElementById('successGuests').textContent = `${bookingData.guests} guest${bookingData.guests > 1 ? 's' : ''}`;
     document.getElementById('successTotal').textContent = `₦${grandTotal.toLocaleString('en-NG')}`;
     
+    console.log('✅ Success fields populated');
+    
     // Hide booking content and show success state
     document.getElementById('bookingContent').style.display = 'none';
     document.getElementById('successState').style.display = 'block';
     
+    console.log('✅ Success state visible');
+    
     // Initialize Lucide icons for success state
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
+        console.log('✅ Lucide icons initialized');
     }
     
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('✅ Scrolled to top');
 }
 
 function openWhatsApp(formData) {
