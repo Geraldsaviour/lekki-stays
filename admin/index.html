@@ -17,7 +17,7 @@ n<!DOCTYPE html>
                 <p class="subtitle">Admin Dashboard</p>
             </div>
 
-            <form id="loginForm" class="login-form">
+            <form id="loginForm" class="login-form" autocomplete="off">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input 
@@ -26,7 +26,10 @@ n<!DOCTYPE html>
                         name="email" 
                         required 
                         placeholder="admin@luxstay.ng"
-                        autocomplete="email"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="false"
                     >
                 </div>
 
@@ -38,7 +41,10 @@ n<!DOCTYPE html>
                         name="password" 
                         required 
                         placeholder="Enter your password"
-                        autocomplete="current-password"
+                        autocomplete="new-password"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="false"
                     >
                 </div>
 

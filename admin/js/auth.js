@@ -33,11 +33,18 @@ loginForm.addEventListener('submit', async (e) => {
 
         if (error) throw error;
 
+        // Clear form fields immediately for security
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+        
         // Redirect to dashboard
         window.location.href = 'dashboard.html';
         
     } catch (error) {
         console.error('Login error:', error);
+        
+        // Clear password field on error for security
+        document.getElementById('password').value = '';
         
         let message = 'Login failed. Please try again.';
         
@@ -60,6 +67,31 @@ loginForm.addEventListener('submit', async (e) => {
         btnLoader.style.display = 'none';
         loginBtn.disabled = false;
     }
+});
+
+// Prevent form autofill on page load
+window.addEventListener('load', () => {
+    // Clear form fields on page load
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+    
+    // Disable browser password manager suggestions
+    setTimeout(() => {
+        document.getElementById('email').setAttribute('readonly', 'readonly');
+        document.getElementById('password').setAttribute('readonly', 'readonly');
+        
+        // Remove readonly after a short delay to allow user input
+        setTimeout(() => {
+            document.getElementById('email').removeAttribute('readonly');
+            document.getElementById('password').removeAttribute('readonly');
+        }, 100);
+    }, 100);
+});
+
+// Clear fields when user navigates away
+window.addEventListener('beforeunload', () => {
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
 });
 
 // Check if already logged in
