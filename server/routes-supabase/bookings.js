@@ -84,16 +84,56 @@ router.post('/', bookingRateLimit, async (req, res) => {
     
     console.log(`✅ Booking created: ${booking.bookingRef}`);
     
-    // Generate WhatsApp notification link (will be implemented in whatsapp.js)
-    const whatsappLink = `https://wa.me/${process.env.HOST_WHATSAPP_NUMBER}?text=${encodeURIComponent(
-      `New Booking Request\n\nRef: ${booking.bookingRef}\nApartment: ${apartment.name}\nGuest: ${booking.guestName}\nCheck-in: ${booking.checkIn}\nCheck-out: ${booking.checkOut}\nGuests: ${booking.guests}\nTotal: ₦${booking.totalPrice.toLocaleString()}`
-    )}`;
+    // Generate WhatsApp notification for admin/host
+    const adminWhatsAppMessage = `🏨 *NEW BOOKING REQUEST*
+
+📋 *Booking Details:*
+Ref: ${booking.bookingRef}
+Apartment: ${apartment.name}
+
+👤 *Guest Information:*
+Name: ${booking.guestName}
+Phone: ${booking.guestPhone}
+Email: ${booking.guestEmail}
+
+📅 *Stay Details:*
+Check-in: ${booking.checkIn}
+Check-out: ${booking.checkOut}
+Guests: ${booking.guests}
+
+💰 *Payment:*
+Total: ₦${booking.totalPrice.toLocaleString()}
+
+⏰ *Status:* Pending Confirmation
+
+Please review and respond to this booking request.`;
+
+    const adminWhatsAppLink = `https://wa.me/${process.env.HOST_WHATSAPP_NUMBER}?text=${encodeURIComponent(adminWhatsAppMessage)}`;
+    
+    // Generate WhatsApp link for guest (for "Pay via WhatsApp" option)
+    const guestWhatsAppMessage = `Hello! I'd like to confirm my booking.
+
+Booking Reference: ${booking.bookingRef}
+Apartment: ${apartment.name}
+Check-in: ${booking.checkIn}
+Check-out: ${booking.checkOut}
+Guests: ${booking.guests}
+Total: ₦${booking.totalPrice.toLocaleString()}
+
+Please confirm my reservation. Thank you!`;
+
+    const guestWhatsAppLink = `https://wa.me/${process.env.HOST_WHATSAPP_NUMBER}?text=${encodeURIComponent(guestWhatsAppMessage)}`;
+    
+    // Log admin notification (in production, this would trigger actual WhatsApp send)
+    console.log(`📱 Admin WhatsApp notification ready for: ${process.env.HOST_WHATSAPP_NUMBER}`);
+    console.log(`📋 Booking Ref: ${booking.bookingRef}`);
     
     res.status(201).json({
       success: true,
       booking: booking.toPublicJSON(),
       bookingRef: booking.bookingRef,
-      whatsappLink,
+      whatsappLink: guestWhatsAppLink,
+      adminNotificationLink: adminWhatsAppLink,
       message: 'Booking created successfully. Host will be notified via WhatsApp.'
     });
   } catch (error) {
