@@ -801,6 +801,12 @@ function initializeLucideIcons() {
 let currentReceiptBooking = null;
 let uploadedReceiptFile = null;
 
+function closeReceiptModal() {
+    const modal = document.getElementById('receiptModal');
+    modal.classList.remove('active');
+    resetReceiptForm();
+}
+
 function initializeReceiptModal() {
     const modal = document.getElementById('receiptModal');
     const closeBtn = document.getElementById('closeReceiptModal');
@@ -811,15 +817,14 @@ function initializeReceiptModal() {
     const referenceInput = document.getElementById('receiptReference');
     const checkboxes = document.querySelectorAll('.checkbox-label input[type="checkbox"]');
 
-    // Close modal
-    const closeModal = () => {
-        modal.classList.remove('active');
-        resetReceiptForm();
-    };
-
-    closeBtn?.addEventListener('click', closeModal);
-    cancelBtn?.addEventListener('click', closeModal);
-    modal?.querySelector('.modal-overlay')?.addEventListener('click', closeModal);
+    // Close modal handlers
+    closeBtn?.addEventListener('click', closeReceiptModal);
+    cancelBtn?.addEventListener('click', closeReceiptModal);
+    modal?.querySelector('.modal-overlay')?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) {
+            closeReceiptModal();
+        }
+    });
 
     // File upload preview
     fileInput?.addEventListener('change', (e) => {
@@ -919,7 +924,7 @@ function initializeReceiptModal() {
             }
 
             await showAlert('Payment verified and booking marked as paid!', 'success');
-            closeModal();
+            closeReceiptModal();
             await loadDashboardData();
 
         } catch (error) {
