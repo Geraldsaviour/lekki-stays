@@ -1524,7 +1524,7 @@ const havenListings = [
         description: "Executive two-bedroom suite in the prestigious Ikoyi district. Ideal for business executives and discerning travelers seeking sophistication and convenience.",
         location: "23 Kingsway Road, Ikoyi, Lagos",
         amenities: ["Gym", "Kitchen", "WiFi", "Parking", "Air conditioning", "Smart TV", "Security", "Workspace"],
-        images: ["https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80", 
+        images: ["https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80", 
                 "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80", 
                 "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"]
     },
