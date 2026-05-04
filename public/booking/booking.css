@@ -833,6 +833,53 @@ body {
     .accordion-item.active .accordion-content {
         padding: 0 20px 20px;
     }
+    
+    /* Success state mobile styles */
+    .success-content {
+        padding: 32px 24px;
+    }
+    
+    .success-title {
+        font-size: 1.8rem;
+    }
+    
+    .success-subtitle {
+        font-size: 1rem;
+    }
+    
+    .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .success-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .success-actions .btn-primary,
+    .success-actions .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .step {
+        gap: 12px;
+    }
+    
+    .step-number {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    
+    .step-content h4 {
+        font-size: 1rem;
+    }
+    
+    .step-content p {
+        font-size: 0.95rem;
+    }
 }
 
 /* ===== FOOTER SECTION ===== */
