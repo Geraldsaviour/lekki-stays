@@ -971,10 +971,17 @@ function showEmptyBookingsState() {
     section.style.display = 'block';
     bookingsList.innerHTML = `
         <div class="empty-state">
-            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-icon">
+                <i data-lucide="clipboard" style="width: 48px; height: 48px;"></i>
+            </div>
             <div class="empty-state-text">No pending bookings at the moment</div>
         </div>
     `;
+    
+    // Initialize Lucide icons for the empty state
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 }
 
 // Navbar Book Now button functionality
