@@ -802,14 +802,15 @@
 }
 
 .btn-secondary {
-    background: var(--bg-secondary);
+    background: transparent;
     color: var(--text-primary);
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
+    font-weight: 500;
 }
 
 .btn-secondary:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--primary);
+    background: var(--bg-secondary);
+    border-color: var(--text-secondary);
     transform: translateY(-1px);
 }
 
