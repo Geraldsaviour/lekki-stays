@@ -124,9 +124,20 @@ Please confirm my reservation. Thank you!`;
 
     const guestWhatsAppLink = `https://wa.me/${process.env.HOST_WHATSAPP_NUMBER}?text=${encodeURIComponent(guestWhatsAppMessage)}`;
     
-    // Log admin notification (in production, this would trigger actual WhatsApp send)
-    console.log(`📱 Admin WhatsApp notification ready for: ${process.env.HOST_WHATSAPP_NUMBER}`);
+    // Log admin notification prominently
+    console.log('\n' + '='.repeat(70));
+    console.log('📱 NEW BOOKING - ADMIN ACTION REQUIRED');
+    console.log('='.repeat(70));
     console.log(`📋 Booking Ref: ${booking.bookingRef}`);
+    console.log(`👤 Guest: ${booking.guestName}`);
+    console.log(`📞 Phone: ${booking.guestPhone}`);
+    console.log(`🏨 Apartment: ${apartment.name}`);
+    console.log(`📅 Check-in: ${booking.checkIn}`);
+    console.log(`💰 Total: ₦${booking.totalPrice.toLocaleString()}`);
+    console.log('='.repeat(70));
+    console.log('🔗 Click this link to notify yourself via WhatsApp:');
+    console.log(adminWhatsAppLink);
+    console.log('='.repeat(70) + '\n');
     
     res.status(201).json({
       success: true,

@@ -423,16 +423,23 @@ async function handleSubmit() {
         
         const response = await window.lekkirStaysAPI.createBooking(bookingPayload);
         
+        console.log('📡 API Response:', response);
+        
         if (response.success) {
             // Booking created successfully
             const booking = response.booking;
             
+            console.log('✅ Booking created:', booking);
+            console.log('💳 Payment method:', selectedPaymentMethod);
+            
             switch (selectedPaymentMethod) {
                 case 'arrival':
+                    console.log('🏠 Pay on Arrival - Showing success page');
                     showSuccessState(formData, booking);
                     break;
                     
                 case 'whatsapp':
+                    console.log('💬 Pay via WhatsApp - Opening WhatsApp and showing success page');
                     // Use the WhatsApp link from the API response
                     if (response.whatsappLink) {
                         window.open(response.whatsappLink, '_blank');
