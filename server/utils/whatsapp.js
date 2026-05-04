@@ -42,9 +42,7 @@ class WhatsAppNotifier {
    * @returns {string} WhatsApp URL for host notification
    */
   static generateHostNotification(booking, apartment) {
-    const message = `🏠 NEW BOOKING — Lekki Stays
-
-Apartment: ${apartment.name}
+    const message = `Apartment: ${apartment.name}
 Guest: ${booking.guestName}
 Phone: ${booking.guestPhone}
 Email: ${booking.guestEmail}
@@ -52,14 +50,7 @@ Check-in: ${booking.checkIn}
 Check-out: ${booking.checkOut}
 Guests: ${booking.numGuests}
 Total: ${this.formatNaira(booking.totalPrice)}
-Booking ID: #${booking.id}
-
-📋 Next Steps:
-1. Review booking details above
-2. Confirm or decline via admin dashboard
-3. Send payment details to guest after confirming
-
-Admin Dashboard: ${process.env.BASE_URL}/admin`;
+Booking ID: #${booking.id}`;
 
     return this.generateWhatsAppURL(process.env.HOST_WHATSAPP_NUMBER, message);
   }

@@ -147,18 +147,25 @@ function initializeNavigation() {
 function initializeEventListeners() {
     // Logout button
     document.getElementById('logoutBtn').addEventListener('click', async () => {
-        try {
-            await signOut();
-            
-            // Clear any cached data
-            sessionStorage.clear();
-            localStorage.clear();
-            
-            // Force redirect to login page
-            window.location.replace('index.html');
-        } catch (error) {
-            console.error('Logout error:', error);
-            alert('Failed to logout. Please try again.');
+        const confirmed = await showConfirm(
+            'Are you sure you want to logout?',
+            'Confirm Logout'
+        );
+        
+        if (confirmed) {
+            try {
+                await signOut();
+                
+                // Clear any cached data
+                sessionStorage.clear();
+                localStorage.clear();
+                
+                // Force redirect to login page
+                window.location.replace('index.html');
+            } catch (error) {
+                console.error('Logout error:', error);
+                await showAlert('Failed to logout. Please try again.', 'error');
+            }
         }
     });
 
@@ -393,9 +400,13 @@ async function handleBookingAction(action, bookingId) {
                 break;
 
             case 'confirm':
-                if (confirm(`Confirm booking for ${booking.guest_name}?`)) {
+                const confirmResult = await showConfirm(
+                    `Confirm booking for ${booking.guest_name}?`,
+                    'Confirm Booking'
+                );
+                if (confirmResult) {
                     await confirmBooking(bookingId);
-                    alert('Booking confirmed! You can now send payment details.');
+                    await showAlert('Booking confirmed! You can now send payment details.');
                     await loadDashboardData();
                 }
                 break;
@@ -406,7 +417,7 @@ async function handleBookingAction(action, bookingId) {
                     `Provide a reason for declining ${booking.guest_name}'s booking (optional):`,
                     async (reason) => {
                         await declineBooking(bookingId, reason);
-                        alert('Booking declined.');
+                        await showAlert('Booking declined.');
                         await loadDashboardData();
                     }
                 );
@@ -414,13 +425,17 @@ async function handleBookingAction(action, bookingId) {
 
             case 'payment':
                 sendPaymentDetails(booking);
-                alert('Payment details sent via WhatsApp!');
+                await showAlert('Payment details sent via WhatsApp!');
                 break;
 
             case 'paid':
-                if (confirm(`Mark booking as paid for ${booking.guest_name}?`)) {
+                const paidResult = await showConfirm(
+                    `Mark booking as paid for ${booking.guest_name}?`,
+                    'Mark as Paid'
+                );
+                if (paidResult) {
                     await markAsPaid(bookingId);
-                    alert('Booking marked as paid!');
+                    await showAlert('Booking marked as paid!');
                     await loadDashboardData();
                 }
                 break;
@@ -431,7 +446,7 @@ async function handleBookingAction(action, bookingId) {
                     `Provide a reason for cancelling ${booking.guest_name}'s booking (optional):`,
                     async (reason) => {
                         await cancelBooking(bookingId, reason);
-                        alert('Booking cancelled.');
+                        await showAlert('Booking cancelled.');
                         await loadDashboardData();
                     }
                 );
@@ -439,7 +454,7 @@ async function handleBookingAction(action, bookingId) {
         }
     } catch (error) {
         console.error('Action error:', error);
-        alert('Failed to perform action. Please try again.');
+        await showAlert('Failed to perform action. Please try again.', 'error');
     }
 }
 
@@ -672,7 +687,112 @@ function showLoadingState(containerId) {
 
 // Show error
 function showError(message) {
-    alert(message);
+    showAlert(message, 'error');
+}
+
+// Custom Confirm Modal
+function showConfirm(message, title = 'Confirm Action') {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('confirmModal');
+        const titleEl = document.getElementById('confirmModalTitle');
+        const messageEl = document.getElementById('confirmModalMessage');
+        const submitBtn = document.getElementById('submitConfirmBtn');
+        const cancelBtn = document.getElementById('cancelConfirmBtn');
+        const closeBtn = document.getElementById('closeConfirmModal');
+
+        // Set content
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+
+        // Show modal
+        modal.classList.add('active');
+
+        // Handle confirm
+        const handleConfirm = () => {
+            modal.classList.remove('active');
+            cleanup();
+            resolve(true);
+        };
+
+        // Handle cancel
+        const handleCancel = () => {
+            modal.classList.remove('active');
+            cleanup();
+            resolve(false);
+        };
+
+        // Cleanup listeners
+        const cleanup = () => {
+            submitBtn.removeEventListener('click', handleConfirm);
+            cancelBtn.removeEventListener('click', handleCancel);
+            closeBtn.removeEventListener('click', handleCancel);
+        };
+
+        // Attach listeners
+        submitBtn.addEventListener('click', handleConfirm);
+        cancelBtn.addEventListener('click', handleCancel);
+        closeBtn.addEventListener('click', handleCancel);
+
+        // Initialize icons
+        initializeLucideIcons();
+    });
+}
+
+// Custom Alert Modal
+function showAlert(message, type = 'success', title = null) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('alertModal');
+        const titleEl = document.getElementById('alertModalTitle');
+        const messageEl = document.getElementById('alertModalMessage');
+        const iconEl = document.getElementById('alertIcon');
+        const iconContainer = document.querySelector('.alert-icon');
+        const closeBtn = document.getElementById('closeAlertBtn');
+        const closeModalBtn = document.getElementById('closeAlertModal');
+
+        // Set title based on type
+        if (!title) {
+            title = type === 'success' ? 'Success' : 
+                    type === 'error' ? 'Error' : 
+                    type === 'warning' ? 'Warning' : 'Notification';
+        }
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+
+        // Set icon based on type
+        iconContainer.className = 'alert-icon';
+        if (type === 'error') {
+            iconContainer.classList.add('error');
+            iconEl.setAttribute('data-lucide', 'x-circle');
+        } else if (type === 'warning') {
+            iconContainer.classList.add('warning');
+            iconEl.setAttribute('data-lucide', 'alert-triangle');
+        } else {
+            iconEl.setAttribute('data-lucide', 'check-circle');
+        }
+
+        // Show modal
+        modal.classList.add('active');
+
+        // Handle close
+        const handleClose = () => {
+            modal.classList.remove('active');
+            cleanup();
+            resolve();
+        };
+
+        // Cleanup listeners
+        const cleanup = () => {
+            closeBtn.removeEventListener('click', handleClose);
+            closeModalBtn.removeEventListener('click', handleClose);
+        };
+
+        // Attach listeners
+        closeBtn.addEventListener('click', handleClose);
+        closeModalBtn.addEventListener('click', handleClose);
+
+        // Initialize icons
+        initializeLucideIcons();
+    });
 }
 
 // Initialize Lucide icons

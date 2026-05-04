@@ -219,6 +219,51 @@
         </div>
     </div>
 
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-confirm">
+            <div class="modal-header">
+                <h2 id="confirmModalTitle">Confirm Action</h2>
+                <button class="modal-close" id="closeConfirmModal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-icon">
+                    <i data-lucide="alert-circle" id="confirmIcon"></i>
+                </div>
+                <p id="confirmModalMessage" class="confirm-message"></p>
+                <div class="confirm-actions">
+                    <button class="btn-secondary" id="cancelConfirmBtn">Cancel</button>
+                    <button class="btn-primary" id="submitConfirmBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div id="alertModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-alert">
+            <div class="modal-header">
+                <h2 id="alertModalTitle">Notification</h2>
+                <button class="modal-close" id="closeAlertModal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-icon">
+                    <i data-lucide="check-circle" id="alertIcon"></i>
+                </div>
+                <p id="alertModalMessage" class="alert-message"></p>
+                <div class="alert-actions">
+                    <button class="btn-primary" id="closeAlertBtn">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
