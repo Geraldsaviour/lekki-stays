@@ -2,6 +2,16 @@
 
 A modern, secure booking platform for luxury shortlet accommodations in Lagos, Nigeria, with WhatsApp integration for seamless host-guest communication.
 
+## 📚 Documentation
+
+**All project documentation is now organized in the [`docs/`](docs/) folder.**
+
+- 🚀 **[Quick Start Guide](docs/START_HERE.md)** - Begin here for setup
+- 📖 **[Documentation Index](docs/INDEX.md)** - Complete documentation overview
+- 🔧 **[Admin Setup](docs/ADMIN_QUICK_SETUP.md)** - Admin dashboard setup
+- 🔒 **[Security Guide](docs/ADMIN_LOGIN_SECURITY_COMPLETE.md)** - Security features
+- 📊 **[Project Status](docs/PROJECT_STATUS.md)** - Current development status
+
 ## ✨ Features
 
 - 🏡 **Beautiful Property Listings** - Showcase luxury apartments with high-quality images
