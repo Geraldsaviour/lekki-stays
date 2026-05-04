@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeNavigation();
     initializeEventListeners();
     initializeMobileMenu();
+    initializeReceiptModal();
     await loadDashboardData();
     initializeLucideIcons();
 });
@@ -972,8 +973,3 @@ async function showReceiptModal(booking) {
     
     initializeLucideIcons();
 }
-
-// Initialize receipt modal on page load
-document.addEventListener('DOMContentLoaded', () => {
-    initializeReceiptModal();
-});
