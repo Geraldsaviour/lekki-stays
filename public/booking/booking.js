@@ -32,12 +32,16 @@ async function initializeBookingPage() {
         return;
     }
     
+    // Show loading state
+    showLoadingState();
+    
     try {
         // Fetch apartment data from API
         const response = await window.lekkirStaysAPI.getApartment(bookingData.id);
         
         if (!response.success || !response.apartment) {
             console.error('Failed to load apartment data:', response);
+            hideLoadingState();
             showErrorState();
             return;
         }
@@ -50,17 +54,48 @@ async function initializeBookingPage() {
         bookingData.checkout = new Date(bookingData.checkout);
         bookingData.guests = parseInt(bookingData.guests);
         
-        // Show booking content and populate data
+        // CHECK AVAILABILITY FIRST - Before showing the form
+        const availabilityCheck = await checkDateAvailabilityBeforeForm();
+        
+        hideLoadingState();
+        
+        if (!availabilityCheck.available) {
+            // Dates are not available - show conflict page immediately
+            showDateConflictPage(availabilityCheck.conflict);
+            return;
+        }
+        
+        // Dates are available - show booking form
         document.getElementById('bookingContent').style.display = 'block';
         populateBookingData();
         initializeInteractions();
         
-        // Check availability for these dates
-        checkDateAvailability();
-        
     } catch (error) {
         console.error('Error loading booking page:', error);
+        hideLoadingState();
         showErrorState();
+    }
+}
+
+function showLoadingState() {
+    const container = document.querySelector('.booking-main .container');
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loadingState';
+    loadingDiv.className = 'loading-state';
+    loadingDiv.innerHTML = `
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Checking Availability...</h3>
+            <p>Please wait while we verify the selected dates</p>
+        </div>
+    `;
+    container.appendChild(loadingDiv);
+}
+
+function hideLoadingState() {
+    const loadingState = document.getElementById('loadingState');
+    if (loadingState) {
+        loadingState.remove();
     }
 }
 
@@ -69,6 +104,40 @@ function showErrorState() {
 }
 
 // === AVAILABILITY CHECKING ===
+async function checkDateAvailabilityBeforeForm() {
+    try {
+        // Fetch booked dates for this apartment
+        const response = await window.lekkirStaysAPI.getBookedDates(bookingData.id);
+        
+        if (response.success && response.bookedDates) {
+            bookedDates = response.bookedDates;
+            
+            // Check if selected dates conflict with any bookings
+            const conflict = checkDateConflict(bookingData.checkin, bookingData.checkout);
+            
+            if (conflict) {
+                return {
+                    available: false,
+                    conflict: conflict
+                };
+            }
+        }
+        
+        return {
+            available: true,
+            conflict: null
+        };
+    } catch (error) {
+        console.error('Failed to check availability:', error);
+        // If availability check fails, allow booking to proceed
+        // The backend will validate again during submission
+        return {
+            available: true,
+            conflict: null
+        };
+    }
+}
+
 async function checkDateAvailability() {
     try {
         // Fetch booked dates for this apartment
@@ -103,6 +172,76 @@ function checkDateConflict(checkin, checkout) {
     }
     
     return null;
+}
+
+function showDateConflictPage(booking) {
+    // Hide booking content and error state
+    document.getElementById('bookingContent').style.display = 'none';
+    document.getElementById('errorState').style.display = 'none';
+    
+    // Create conflict page
+    const conflictDiv = document.createElement('div');
+    conflictDiv.id = 'dateConflictPage';
+    conflictDiv.className = 'date-conflict-container';
+    
+    const checkInDate = booking ? new Date(booking.checkIn) : null;
+    const checkOutDate = booking ? new Date(booking.checkOut) : null;
+    
+    conflictDiv.innerHTML = `
+        <div class="conflict-content">
+            <div class="conflict-icon">
+                <i data-lucide="calendar-x"></i>
+            </div>
+            <h2>Dates Not Available</h2>
+            <p class="conflict-message">Unfortunately, the dates you selected are no longer available for this apartment.</p>
+            
+            <div class="conflict-details">
+                <div class="detail-row">
+                    <span class="detail-label">Apartment:</span>
+                    <span class="detail-value">${currentListing.name}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Your selected dates:</span>
+                    <span class="detail-value">${formatDate(bookingData.checkin)} - ${formatDate(bookingData.checkout)}</span>
+                </div>
+                ${booking && checkInDate && checkOutDate ? `
+                <div class="detail-row">
+                    <span class="detail-label">Conflicting booking:</span>
+                    <span class="detail-value">${formatDateFull(checkInDate)} - ${formatDateFull(checkOutDate)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value status-${booking.status}">${booking.status === 'pending' ? 'Awaiting Confirmation' : 'Confirmed'}</span>
+                </div>
+                ` : ''}
+            </div>
+            
+            <p class="conflict-help">Please go back and select different dates for your stay.</p>
+            
+            <div class="conflict-actions">
+                <button class="btn-back" onclick="goBackToListing()">
+                    <i data-lucide="arrow-left"></i>
+                    Choose Different Dates
+                </button>
+                <button class="btn-contact" onclick="contactViaWhatsApp()">
+                    <i data-lucide="message-circle"></i>
+                    Contact Us
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Insert into container
+    const container = document.querySelector('.booking-main .container');
+    container.appendChild(conflictDiv);
+    
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function showDateConflictPopup(booking) {
