@@ -433,22 +433,121 @@ async function handleSubmit() {
                 window.open(response.whatsappLink, '_blank');
             }
             
-            // Show success page
+            // Show success page immediately after WhatsApp opens
             showSuccessState(formData, booking);
         } else {
-            throw new Error(response.error || 'Failed to create booking');
+            // Check if it's a date conflict error
+            if (response.error === 'Apartment not available' || response.message?.includes('already booked')) {
+                showDateConflictError(response.message);
+            } else {
+                throw new Error(response.error || 'Failed to create booking');
+            }
         }
         
     } catch (error) {
         console.error('Booking failed:', error);
-        alert(`Booking failed: ${error.message}. Please try again or contact us directly.`);
         
-        // Fallback to WhatsApp
-        openWhatsApp(formData);
+        // Check if it's a date conflict error
+        if (error.message.includes('already booked') || error.message.includes('not available')) {
+            showDateConflictError(error.message);
+        } else {
+            showBookingError(error.message);
+        }
     } finally {
         // Reset button
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
+    }
+}
+
+function showDateConflictError(message) {
+    // Hide booking content
+    document.getElementById('bookingContent').style.display = 'none';
+    
+    // Create conflict error popup
+    const conflictDiv = document.createElement('div');
+    conflictDiv.id = 'dateConflictError';
+    conflictDiv.className = 'date-conflict-container';
+    
+    conflictDiv.innerHTML = `
+        <div class="conflict-content">
+            <div class="conflict-icon">
+                <i data-lucide="calendar-x"></i>
+            </div>
+            <h2>Dates No Longer Available</h2>
+            <p class="conflict-message">We're sorry, but this apartment has just been booked for your selected dates.</p>
+            
+            <div class="conflict-details">
+                <div class="detail-row">
+                    <span class="detail-label">Your selected dates:</span>
+                    <span class="detail-value">${formatDate(bookingData.checkin)} - ${formatDate(bookingData.checkout)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Apartment:</span>
+                    <span class="detail-value">${currentListing.name}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value status-unavailable">Not Available</span>
+                </div>
+            </div>
+            
+            <p class="conflict-help">Please select different dates or contact us to find alternative accommodations.</p>
+            
+            <div class="conflict-actions">
+                <button class="btn-back" onclick="goBackToListing()">
+                    <i data-lucide="arrow-left"></i>
+                    Choose Different Dates
+                </button>
+                <button class="btn-contact" onclick="contactViaWhatsApp()">
+                    <i data-lucide="message-circle"></i>
+                    Contact Us
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Insert before booking content
+    const container = document.querySelector('.booking-main .container');
+    container.insertBefore(conflictDiv, document.getElementById('bookingContent'));
+    
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showBookingError(message) {
+    // Show user-friendly error modal
+    const errorModal = document.createElement('div');
+    errorModal.className = 'error-modal';
+    errorModal.innerHTML = `
+        <div class="error-modal-content">
+            <div class="error-modal-icon">
+                <i data-lucide="alert-circle"></i>
+            </div>
+            <h3>Booking Error</h3>
+            <p>${message || 'Unable to complete your booking at this time.'}</p>
+            <p class="error-help">Please try again or contact us for assistance.</p>
+            <div class="error-modal-actions">
+                <button class="btn-primary" onclick="this.closest('.error-modal').remove()">
+                    Try Again
+                </button>
+                <button class="btn-secondary" onclick="contactViaWhatsApp()">
+                    Contact Support
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(errorModal);
+    
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 }
 
